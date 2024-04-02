@@ -18,13 +18,13 @@ class steams(commands.Cog):
                 thejsons = json.load(steamfile)
                 thegames = thejsons["applist"]["apps"]
                 thegame = random.choice(thegames)
-                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg")
+                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                 embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
                 
                 async def callback(interaction: discord.Interaction):
                     try:
                         thegame = random.choice(thegames)
-                        new_embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg")
+                        new_embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                         new_embed.set_footer(text=f"Requested by {interaction.user.name} | App ID {thegame['appid']}")
                         
                         await interaction.response.edit_message(embed=new_embed)
@@ -54,7 +54,7 @@ class steams(commands.Cog):
                 matched_games.sort(key=lambda x: x['name'].lower().index(thesearch.lower()))
                 
                 if not matched_games:
-                    await ctx.respond("No game found.")
+                    await ctx.respond("No games found.")
                     return
                 
                 # pagination
@@ -97,7 +97,7 @@ class steams(commands.Cog):
                 if thegame == 'uknoy :()':
                     await ctx.respond('Game not found. Please enter exact name')
                     return
-                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg")
+                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                 embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
                 await ctx.respond(embed=embed)
         except Exception as e:
