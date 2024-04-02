@@ -15,7 +15,7 @@ class gimsathing(discord.ui.View):
     async def back_button_callback(self, button, interaction):
         if self.ctx.author.id == interaction.user.id:
             self.counter = (self.counter - 1) % len(self.imgurl)  # Decrement the counter and loop back to the end if it goes below 0
-            embed = discord.Embed(title=f"Image {self.counter+1}/{self.lengthy}", image=self.imgurl[self.counter].replace(' ', '%20'))
+            embed = discord.Embed(title=f"Image {self.counter+1}/{self.lengthy}", image=self.imgurl[self.counter].replace(' ', '%20'), colour=0x00b0f4)
             embed.set_footer(text=f"Requested by {self.ctx.author.name}")
             await interaction.response.edit_message(embed=embed)#content=f"Image [{self.counter+1}/{self.lengthy}]({self.imgurl[self.counter].replace(' ', '%20')})")
         else:
@@ -25,7 +25,7 @@ class gimsathing(discord.ui.View):
     async def next_button_callback(self, button, interaction):
         if self.ctx.author.id == interaction.user.id:
             self.counter = (self.counter + 1) % len(self.imgurl)  # Increment the counter and loop back to 0 if it exceeds the list length
-            embed = discord.Embed(title=f"Image {self.counter+1}/{self.lengthy}", image=self.imgurl[self.counter].replace(' ', '%20'))
+            embed = discord.Embed(title=f"Image {self.counter+1}/{self.lengthy}", image=self.imgurl[self.counter].replace(' ', '%20'), colour=0x00b0f4)
             embed.set_footer(text=f"Requested by {self.ctx.author.name}")
             await interaction.response.edit_message(embed=embed)#content=f"Image [{self.counter+1}/{self.lengthy}]({self.imgurl[self.counter].replace(' ', '%20')})")
         else:
@@ -43,7 +43,7 @@ class gimsacmd(commands.Cog):
         ctx.lengthy = len(ctx.imgurl)
         #await ctx.respond(f"Left {ctx.lengthy} out of 20 images")
         #sleep(3)
-        embed = discord.Embed(title=f"Image 1/{ctx.lengthy}", image=ctx.imgurl[0].replace(' ', '%20'))
+        embed = discord.Embed(title=f"Image 1/{ctx.lengthy}", image=ctx.imgurl[0].replace(' ', '%20'), colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed, view=gimsathing(ctx))
 
