@@ -63,6 +63,35 @@ class apicmds(commands.Cog):
                 else:
                     await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
 
+    @commands.slash_command(name="amd-gpu", description="Sends a random AMD GPU")
+    @commands.cooldown(1, 3, BucketType.user)
+    async def gpumyy(self, ctx):
+        endpoint = "https://api.nikolan.xyz/amd-gpu"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(endpoint) as response:
+                if response.status == 200:
+                    cpu_info = await response.json()
+                    if cpu_info:
+                        cpumodel = cpu_info['Model']
+                        rdate = cpu_info['Launch Date']
+                        tdp = cpu_info['Typical Board Power (Desktop)']
+                        maxvram = cpu_info['Max Memory Size']
+                        ramtype = cpu_info['Memory Type']
+                        embed = discord.Embed(
+                            title=f"{cpumodel}",
+                            color=0xff0000,
+                            description=f"""
+                        **Release Date** {rdate}
+                        **VRAM**: Up to {maxvram} {ramtype}
+                        **TBP** {tdp}
+                        """)
+                        embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-cpu")
+                        await ctx.respond(embed=embed)
+                    else:
+                        await ctx.respond("Failed to fetch CPU information from the API.")
+                else:
+                    await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
+
     @commands.slash_command(name="nvidia-gpu", description="Sends a random Nvidia GPU")
     @commands.cooldown(1, 3, BucketType.user)
     async def nvgpu(self, ctx):
