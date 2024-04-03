@@ -44,7 +44,7 @@ class dadbg(commands.Cog):
                         await ctx.respond("You can't blacklist the main ruler.")
                         return
                     else:
-                        with open("blusers", "a") as blfile:
+                        with open("data/blusers", "a") as blfile:
                             blfile.write(f"{arg1}\n")
                         await ctx.respond(f"Blacklisted {arg1}")
                     await ctx.respond(result)
@@ -53,11 +53,11 @@ class dadbg(commands.Cog):
             elif commandy == "unblacklist":
                 if arg1 is not None:
                     arg1 = arg1.replace("<", "").replace("@", "").replace(">", "")
-                    with open("blusers", "r") as blfile:
+                    with open("data/blusers", "r") as blfile:
                         blacklisted_users = blfile.readlines()
                     if arg1 + "\n" in blacklisted_users:
                         blacklisted_users.remove(arg1 + "\n")
-                        with open("blusers", "w") as blfile:
+                        with open("data/blusers", "w") as blfile:
                             blfile.writelines(blacklisted_users)
                         await ctx.respond(f"User {arg1} has been unblacklisted.")
                     else:
