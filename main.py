@@ -11,14 +11,14 @@ import logging
 bot = discord.Bot(intents=discord.Intents.all())
 
 bot.rulers = ["767780952436244491", "1118973285766533250"]
-bot.logginghook = "https://discord.com/api/webhooks/no"
+bot.logginghook = "https://discord.com/api/webhooks/f"
 bot.logginghookname = "nikolan's robot logging"
 bot.supportserver = "https://discord.gg/rgYmNt5BSg"
 bot.ownername = "nikolan"
 
 @bot.check
 async def blacklist_check(ctx):
-    with open('blusers', "r") as bllist:
+    with open('data/blusers', "r") as bllist:
         blacklisted = bllist.readlines()
     embed = discord.Embed(color=0xff0000, title="You have been blocked from using this bot!", description=f"If you think this was a mistake, join the [Discord Server]({bot.supportserver}) or DM @{bot.ownername}.")
     if str(ctx.author.id) in str(blacklisted):
@@ -37,4 +37,4 @@ for h in cogs:
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
 
-bot.run("ok")
+bot.run("f")
