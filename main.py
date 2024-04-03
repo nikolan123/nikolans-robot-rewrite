@@ -25,7 +25,7 @@ async def blacklist_check(ctx):
         await ctx.respond(embed=embed, ephemeral=True)
         return False
     return True
-cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam']
+cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys']
 for h in cogs:
     try:
         bot.load_extension(f"cogs.{h}")
