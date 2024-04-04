@@ -4,6 +4,7 @@ from discord.ext.commands import BucketType
 import socket
 import os
 import platform
+import sympy as sp
 import cpuinfo
 
 class pingcmd(commands.Cog):
@@ -38,8 +39,8 @@ class pingcmd(commands.Cog):
     @commands.slash_command(name="credits", description="Shows the credits")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="Current version", value="**nikolan** - Main bot developer")
-        embed.add_field(inline=False, name="Old version", value="**nikolan** - Main bot developer\n**tom1212.** - Contributor, helped with a lot of stuff\n**giga** - Former contributor, helped clean the code up\n**nexus** - Helped find bugs and vulnerabilities in the bot")
+        embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer")
+        embed.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
         embed.add_field(inline=False, name="Camputers", value="""
 Lenovo ThinkPad X13 Gen 3 AMD
 Lenovo ThinkPad L14 Gen 4 Intel
@@ -93,6 +94,60 @@ Custom built (R5-3600/6500XT)
         embed.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/1247/1247769.png")
         await ctx.respond(embed=embed)
 
+    @commands.slash_command(name="calc", description="Maths")
+    async def calcuyy(self, ctx, thingy: discord.Option(str, "...", name="expression")): # type: ignore
+        try:
+            expr = sp.sympify(thingy)
+            if isinstance(expr, int):
+                fresulty = str(expr)
+            else:
+                fresulty = str(expr).rstrip('0').rstrip('.')
+
+            embed = discord.Embed(colour=0x00b0f4, title="Math Solver", description=f"{thingy} = **{fresulty}**")
+            await ctx.respond(embed=embed)
+        except sp.SympifyError as e:
+            embed = discord.Embed(colour=0xff0000, title='Error! Invalid input', description=str(e))
+            await ctx.respond(embed=embed)
+        except Exception as e:
+            embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=e)
+            await ctx.respond(embed=embed)
+
+    @commands.slash_command(name='about', description='Shows info about the bot')
+    async def botinfosy(self, ctx):
+        await ctx.defer(ephemeral=False)
+        #credits embed
+        bcredits = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0xffffff)
+        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer")
+        bcredits.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
+        #camputers embed
+        camputers = discord.Embed(colour=0x00ff0d, title="Camputers", description="These are all the camputers the bot was developed on")
+        camputers.add_field(inline=False, name="", value="""
+Lenovo ThinkPad X13 Gen 3 AMD
+Lenovo ThinkPad L14 Gen 4 Intel
+Acer Aspire 5 (A514-54-532U)
+Huawei MateBook D14
+Custom built (i3-12100/RX7600)
+Custom built (R5-3600/6500XT)
+""")
+        #history embed
+        histembed = discord.Embed(colour=0xff0000, title="Bot Development History", description="""
+**November 2023** - Initial development started using JavaScript.
+**December 2023** - Transitioned to Python, releasing the first version of the bot.
+**February 2024** - Started a private GitHub repository and invited contributors, bot added to Top.gg
+**March 2024** - Began rewriting the bot
+**April 2024** - [Public GitHub repo](https://github.com/nikolan123/nikolans-robot-rewrite) created
+""")    
+        #send mr embeds
+        embedlist = []
+        embedlist.append(bcredits)
+        embedlist.append(camputers)
+        embedlist.append(histembed)
+        view = discord.ui.View()
+        gitbuton = discord.ui.Button(label='GitHub Repo (star pls)', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
+        topbuton = discord.ui.Button(label='Top.gg (upvote pls)', style=discord.ButtonStyle.url, url=f"https://top.gg/bot/{self.bot.user.id}")
+        view.add_item(gitbuton)
+        view.add_item(topbuton)
+        await ctx.respond(embeds=embedlist, view=view)
 
 def setup(bot):
     bot.add_cog(pingcmd(bot))
