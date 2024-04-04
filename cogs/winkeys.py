@@ -11,6 +11,8 @@ async def getoss(ctx):
     async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
         reader = csv.reader(await csvfile.readlines())
         for row in reader:
+            if ctx.options['version'].lower() == 'windows':
+                return ['Ubuntu 20.04', 'Debian Bookworm', 'Linux Mint 21.3']
             if row and ctx.options['version'].lower() in row[0].lower():
                 data.append(row[0])
         return data
