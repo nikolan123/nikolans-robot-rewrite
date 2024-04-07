@@ -1,12 +1,21 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType
+from discord.ui import Button, View
 import socket
 import os
 import platform
 import sympy as sp
 import cpuinfo
-
+import subprocess
+import re
+def remove_escape_sequences(text):
+    pattern = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
+    cleaned_lines = []
+    for line in text.split('\n'):
+        cleaned_line = pattern.sub('', line).rstrip('\t ').rstrip()
+        cleaned_lines.append(cleaned_line)
+    return '\n'.join(cleaned_lines)
 class pingcmd(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -29,7 +38,34 @@ class pingcmd(commands.Cog):
         embed.add_field(inline=False, name="Debug Information", value=f"**Latency** - `{round(self.bot.latency*1000)}ms`\n**Local IP** - `{local_ip}`\n**Hostname** - `{hostname}`\n**System** - `{platform.system()} {platform.release()} - ({os.name})`\n**Python version** - `{pycpuinf['python_version']}`")
         embed.add_field(inline=False, name="Hardware", value=f"**CPU** - `{pycpuinf['brand_raw']}`")
         embed.set_footer(text=f"Requested by {ctx.author.name}")
-        await ctx.edit(embed=embed, content="")
+        async def neofetch(interaction):
+            #find / -name neofetch 2> /dev/null
+            p = remove_escape_sequences(subprocess.check_output(['/run/host/usr/bin/neofetch', '--off']).decode("utf-8"))
+            embed = discord.Embed(title='neofetch', description=f"```{p}```")
+            await interaction.respond(embed=embed)
+        async def pinglc(interaction):
+            #find / -name ping 2> /dev/null
+            await interaction.respond('Pinging `localhost`...')
+            p = subprocess.check_output(['/run/host/usr/bin/ping', 'localhost', '-c', '4']).decode('utf-8')
+            embed = discord.Embed(title='ping localhost -c 4', description=f"```{p}```")
+            await interaction.respond(embed=embed)
+        async def pinglcn(interaction):
+            #find / -name ping 2> /dev/null
+            await interaction.respond('Pinging `api.nikolan.xyz`...')
+            p = subprocess.check_output(['/run/host/usr/bin/ping', 'api.nikolan.xyz', '-c', '4']).decode('utf-8')
+            embed = discord.Embed(title='ping api.nikolan.xyz -c 4', description=f"```{p}```")
+            await interaction.respond(embed=embed)
+        thev = discord.ui.View()
+        butb = Button(label="Neofetch", style=discord.ButtonStyle.blurple)
+        butb.callback = neofetch
+        thev.add_item(butb)
+        butbb = Button(label="Ping localhost", style=discord.ButtonStyle.blurple)
+        butbb.callback = pinglc
+        thev.add_item(butbb)
+        butbbb = Button(label="Ping api.nikolan.xyz", style=discord.ButtonStyle.blurple)
+        butbbb.callback = pinglcn
+        thev.add_item(butbbb)
+        await ctx.edit(embed=embed, content="", view=thev)
 
     @commands.slash_command(name="top-gg", description="Sends a link to the bot's page in top.gg")
     async def topgg(self, ctx):
