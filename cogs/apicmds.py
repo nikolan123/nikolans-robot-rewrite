@@ -11,20 +11,24 @@ class apicmds(commands.Cog):
     @commands.slash_command(name="intel-cpu", description="Sends a random Intel CPU")
     @commands.cooldown(1, 3, BucketType.user)
     async def cpur(self, ctx):
-        endpoint = "https://api.nikolan.xyz/intel-cpu"
+        await ctx.defer(ephemeral=False)
+        #endpoint = "https://api.nikolan.xyz/intel-cpu"
+        endpoint = "http://192.168.88.25:3032/intel-cpu"
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as response:
                 if response.status == 200:
                     data = await response.json()
                     cpu_info = data.get("cpu")
                     if cpu_info:
-                        embed = discord.Embed(title=f"Intel {cpu_info['Product']}", color=0x2494A1, description=f"**Cores/Threads** {cpu_info['Cores']}c{cpu_info['Threads']}t\n**Release Date** {cpu_info['Release Date']}\n**TDP** {cpu_info['TDP(W)']}W\n**Lithography** {cpu_info['Lithography(nm)']}nm\n**Base/Max Frequency** {cpu_info['Base Freq.(GHz)']}/{cpu_info['Max. Turbo Freq.(GHz)']}GHz")
+                        ghzs = f"**Base Frequency** {cpu_info['Base Freq.(GHz)']}GHz" if cpu_info['Max. Turbo Freq.(GHz)'] == "N/A" else f"**Base/Max Frequency** {cpu_info['Base Freq.(GHz)']}/{cpu_info['Max. Turbo Freq.(GHz)']}GHz"                        
+                        embed = discord.Embed(title=f"Intel {cpu_info['Product']}", color=0x2494A1, description=f"**Cores/Threads** {cpu_info['Cores']}c{cpu_info['Threads']}t\n**Release Date** {cpu_info['Release Date']}\n**TDP** {cpu_info['TDP(W)']}W\n**Lithography** {cpu_info['Lithography(nm)']}nm\n{ghzs}")
                         embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/intel-cpu")
                         await ctx.respond(embed=embed)
                     else:
                         await ctx.respond("Failed to fetch CPU information from the API.")
                 else:
                     await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
+
     @commands.slash_command(name="amd-cpu", description="Sends a random AMD CPU")
     @commands.cooldown(1, 3, BucketType.user)
     async def cpum(self, ctx):
