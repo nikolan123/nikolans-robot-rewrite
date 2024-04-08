@@ -89,7 +89,7 @@ class apicmds(commands.Cog):
                         **VRAM**: Up to {maxvram} {ramtype}
                         **TBP** {tdp}
                         """)
-                        embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-cpu")
+                        embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-gpu")
                         await ctx.respond(embed=embed)
                     else:
                         await ctx.respond("Failed to fetch CPU information from the API.")
