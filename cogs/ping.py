@@ -11,6 +11,12 @@ import subprocess
 import re
 import random
 
+def randocd():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+    hexy = "{:02x}{:02x}{:02x}".format(red, green, blue)
+    return hexy
 def remove_escape_sequences(text):
     pattern = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
     cleaned_lines = []
@@ -77,13 +83,14 @@ class pingcmd(commands.Cog):
     @commands.slash_command(name="credits", description="Shows the credits")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer")
+        embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
         embed.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
         embed.add_field(inline=False, name="Camputers", value="""
 Lenovo ThinkPad X13 Gen 3 AMD
 Lenovo ThinkPad L14 Gen 4 Intel
 Acer Aspire 5 (A514-54-532U)
 Huawei MateBook D14
+Fujitsu Stylistic Q702
 Custom built (i3-12100/RX7600)
 Custom built (R5-3600/6500XT)
 """)
@@ -155,7 +162,7 @@ Custom built (R5-3600/6500XT)
         await ctx.defer(ephemeral=False)
         #credits embed
         bcredits = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0xffffff)
-        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer")
+        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
         bcredits.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
         #camputers embed
         camputers = discord.Embed(colour=0x00ff0d, title="Camputers", description="These are all the camputers the bot was developed on")
@@ -164,6 +171,7 @@ Lenovo ThinkPad X13 Gen 3 AMD
 Lenovo ThinkPad L14 Gen 4 Intel
 Acer Aspire 5 (A514-54-532U)
 Huawei MateBook D14
+Fujitsu Stylistic Q702
 Custom built (i3-12100/RX7600)
 Custom built (R5-3600/6500XT)
 """)
@@ -186,7 +194,7 @@ Custom built (R5-3600/6500XT)
         view.add_item(gitbuton)
         view.add_item(topbuton)
         await ctx.respond(embeds=embedlist, view=view)
-        
+
     @commands.slash_command(name='randoc', description='Generates a random color')
     async def random_color(self, ctx):
         red = random.randint(0, 255)
