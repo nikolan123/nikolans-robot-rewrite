@@ -11,12 +11,6 @@ import subprocess
 import re
 import random
 
-def randocd():
-    red = random.randint(0, 255)
-    green = random.randint(0, 255)
-    blue = random.randint(0, 255)
-    hexy = "{:02x}{:02x}{:02x}".format(red, green, blue)
-    return hexy
 def remove_escape_sequences(text):
     pattern = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
     cleaned_lines = []
