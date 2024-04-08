@@ -29,7 +29,7 @@ class winkeyss(commands.Cog):
             for row in reader:
                 if row and the == row[0]:
                     embed = discord.Embed(colour=0x00b0f4, title=row[0], description=f"Your key is **{row[1]}**")
-                    embed.set_footer(text='All information provided by this command is legal and not considered piracy, they do not activate Windows and are taken from an official Microsoft page (learn.microsoft.com/windows-server/get-started/kms-client-activation-keys).')
+                    embed.set_footer(text='All information provided by this command is legal and not considered piracy, the keys do not activate Windows and are taken from an official Microsoft page (learn.microsoft.com/windows-server/get-started/kms-client-activation-keys).')
                     await ctx.respond(embed=embed)
                     return
         await ctx.respond("Not found. Please, use one of the options.")
