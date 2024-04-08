@@ -9,6 +9,14 @@ import sympy as sp
 import cpuinfo
 import subprocess
 import re
+import random
+
+def randocd():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+    hexy = "{:02x}{:02x}{:02x}".format(red, green, blue)
+    return hexy
 def remove_escape_sequences(text):
     pattern = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
     cleaned_lines = []
@@ -184,6 +192,15 @@ Custom built (R5-3600/6500XT)
         view.add_item(gitbuton)
         view.add_item(topbuton)
         await ctx.respond(embeds=embedlist, view=view)
+        
+    @commands.slash_command(name='randoc', description='Generates a random color')
+    async def random_color(self, ctx):
+        red = random.randint(0, 255)
+        green = random.randint(0, 255)
+        blue = random.randint(0, 255)
+        color_hex = "#{:02x}{:02x}{:02x}".format(red, green, blue)
+        embed = discord.Embed(title="Random Color", description=color_hex, color=discord.Color(int(color_hex[1:], 16)))
+        await ctx.respond(embed=embed)    
 
 def setup(bot):
     bot.add_cog(pingcmd(bot))
