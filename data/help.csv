@@ -25,3 +25,6 @@
 "sleep","Tells others you're going to sleep","none",""
 "top-gg","Sends a link to the bot's Top.gg page","none",""
 "winkey","Returns a Generic Windows key","version",""
+"randoc","Generates a random color","none",""
+"bugreport","Report a bug to the bot's developers","bug",""
+"suggest","Suggest a feature to the bot's developers","suggestion",""
