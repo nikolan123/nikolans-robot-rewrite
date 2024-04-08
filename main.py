@@ -12,6 +12,7 @@ bot = discord.Bot(intents=discord.Intents.all())
 
 bot.rulers = ["767780952436244491", "1118973285766533250"]
 bot.logginghook = "https://discord.com/api/webhooks/f"
+bot.suggestionshook = "https://discord.com/api/webhooks/f"
 bot.logginghookname = "nikolan's robot logging"
 bot.supportserver = "https://discord.gg/rgYmNt5BSg"
 bot.ownername = "nikolan"
@@ -25,7 +26,7 @@ async def blacklist_check(ctx):
         await ctx.respond(embed=embed, ephemeral=True)
         return False
     return True
-cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help']
+cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
     try:
         bot.load_extension(f"cogs.{h}")
