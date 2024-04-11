@@ -180,8 +180,8 @@ Custom built (R5-3600/6500XT)
 **November 2023** - Initial development started using JavaScript.
 **December 2023** - Transitioned to Python, releasing the first version of the bot.
 **February 2024** - Started a private GitHub repository and invited contributors, bot added to Top.gg
-**March 2024** - Began rewriting the bot
-**April 2024** - [Public GitHub repo](https://github.com/nikolan123/nikolans-robot-rewrite) created
+**March 2024** - Began rewriting the bot and created [Public GitHub repo](https://github.com/nikolan123/nikolans-robot-rewrite)
+**April 2024** - Rewrite live!
 """)    
         #send mr embeds
         embedlist = []
