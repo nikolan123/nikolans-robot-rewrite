@@ -19,6 +19,7 @@ class dadbg(commands.Cog):
     @commands.slash_command(name="dbg", description="Debug console for the bot, ignore unless you are a developer")
     async def dbgcmdy(self, ctx, commandy: discord.Option(str, name="command", description="The command you want to run"), arg1: discord.Option(str, name="arg", description="The argument for the command") = None): # type: ignore
         if str(ctx.author.id) in self.rulers:
+            
             #ping command
             if commandy == "ping":
                 if not arg1 == None:
@@ -64,10 +65,29 @@ class dadbg(commands.Cog):
                         await ctx.respond(f"User {arg1} is not blacklisted.")
                 else:
                     await ctx.respond("Please specify a user to unblacklist.")
+            elif commandy == "status playing":
+                if arg1 is not None:
+                    #code here
+                    await self.bot.change_presence(activity=discord.Game(name=arg1))
+                    await ctx.respond("Done!")
+                else:
+                    await ctx.respond("Please specify arg1.")
+            elif commandy == "status watching":
+                if arg1 is not None:
+                    #code here
+                    await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=arg1))
+                    await ctx.respond("Done!")
+                else:
+                    await ctx.respond("Please specify arg1.")
+            elif commandy == "status listening":
+                if arg1 is not None:
+                    #code here
+                    await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=arg1))
+                    await ctx.respond("Done!")
+                else:
+                    await ctx.respond("Please specify arg1.")
             else:
                 await ctx.respond("Command not found.")
-            
-            
         else:
             await ctx.respond("Sorry, you don't have permission to run this command.", ephemeral=True)
 
