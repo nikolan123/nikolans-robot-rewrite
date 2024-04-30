@@ -17,15 +17,26 @@ bot.logginghookname = "nikolan's robot logging"
 bot.supportserver = "https://discord.gg/rgYmNt5BSg"
 bot.ownername = "nikolan"
 
-@bot.check
+# code for the blacklist check
+blacklisted = [] # make empty array
+
+def reloadbl(): # function to refresh the blacklisted user list
+    global blacklisted
+    with open("data/blusers", 'r') as blfiles:
+        blacklisted = blfiles.readlines()
+bot.reloadbl = reloadbl # make the function available from all files
+reloadbl() # run once before bot startup
+
+@bot.check # will run before every command is executed
 async def blacklist_check(ctx):
-    with open('data/blusers', "r") as bllist:
-        blacklisted = bllist.readlines()
-    embed = discord.Embed(color=0xff0000, title="You have been blocked from using this bot!", description=f"If you think this was a mistake, join the [Discord Server]({bot.supportserver}) or DM @{bot.ownername}.")
-    if str(ctx.author.id) in str(blacklisted):
-        await ctx.respond(embed=embed, ephemeral=True)
-        return False
-    return True
+    global blacklisted
+    if str(ctx.author.id) in str(blacklisted): # checks if user is blacklisted
+        embed = discord.Embed(color=0xff0000, title="You have been blocked from using this bot!", description=f"If you think this was a mistake, join the [Discord Server]({bot.supportserver}) or DM @{bot.ownername}.")
+        await ctx.respond(embed=embed, ephemeral=True) # tells user they is blacklisted
+        return False # tells command not to execute
+    return True # tells command to executey bc user isnt blacklisted
+
+
 cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
     try:
