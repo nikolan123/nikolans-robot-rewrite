@@ -12,8 +12,8 @@ class apicmds(commands.Cog):
     @commands.cooldown(1, 3, BucketType.user)
     async def cpur(self, ctx):
         await ctx.defer(ephemeral=False)
-        #endpoint = "https://api.nikolan.xyz/intel-cpu"
-        endpoint = "http://192.168.88.25:3032/intel-cpu"
+        endpoint = "https://api.nikolan.xyz/intel-cpu"
+        #endpoint = "http://192.168.88.25:3032/intel-cpu"
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as response:
                 if response.status == 200:
