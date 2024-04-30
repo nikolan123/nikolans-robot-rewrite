@@ -15,11 +15,10 @@ class dadbg(commands.Cog):
         self.bot = bot
         self._last_member = None
         self.rulers = bot.rulers
-
+        
     @commands.slash_command(name="dbg", description="Debug console for the bot, ignore unless you are a developer")
     async def dbgcmdy(self, ctx, commandy: discord.Option(str, name="command", description="The command you want to run"), arg1: discord.Option(str, name="arg", description="The argument for the command") = None): # type: ignore
         if str(ctx.author.id) in self.rulers:
-            
             #ping command
             if commandy == "ping":
                 if not arg1 == None:
@@ -48,6 +47,7 @@ class dadbg(commands.Cog):
                         with open("data/blusers", "a") as blfile:
                             blfile.write(f"{arg1}\n")
                         await ctx.respond(f"Blacklisted {arg1}")
+                    self.bot.reloadbl()
                     await ctx.respond(result)
                 else:
                     await ctx.respond("Please specify a user to blacklist")
@@ -60,6 +60,7 @@ class dadbg(commands.Cog):
                         blacklisted_users.remove(arg1 + "\n")
                         with open("data/blusers", "w") as blfile:
                             blfile.writelines(blacklisted_users)
+                        self.bot.reloadbl()
                         await ctx.respond(f"User {arg1} has been unblacklisted.")
                     else:
                         await ctx.respond(f"User {arg1} is not blacklisted.")
