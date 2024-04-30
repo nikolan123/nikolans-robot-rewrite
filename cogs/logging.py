@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord_webhook import DiscordWebhook, DiscordEmbed
+from discord_webhook import DiscordEmbed, AsyncDiscordWebhook, DiscordWebhook
 
 class rls(commands.Cog):
     def __init__(self, bot):
@@ -20,11 +20,11 @@ class rls(commands.Cog):
             await ctx.respond(
                 f"The resource is being ratelimited, try again in {error.retry_after:.2f} seconds :3",
                 ephemeral=True)
-            rlhook = DiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - ratelimited user")
+            rlhook = AsyncDiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - ratelimited user")
             rlembed = DiscordEmbed(title="Ratelimited user", description=f"User {ctx.author.name} ({ctx.author.id}) got ratelimited while trying to run {ctx.command} :(", color="ff0000")
             rlembed.set_timestamp()
             rlhook.add_embed(rlembed)
-            rlhook.execute()
+            await rlhook.execute()
     
     @commands.Cog.listener()
     async def on_application_command(self, ctx):
@@ -32,11 +32,11 @@ class rls(commands.Cog):
             fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
         else:
             fancyoptions = ''
-        rlhook = DiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - commands")
+        rlhook = AsyncDiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - commands")
         rlembed = DiscordEmbed(title=f"{ctx.user.name} ran a command", description=f"User {ctx.author.name} ({ctx.author.id}) ran `/{ctx.command} {fancyoptions}` in <#{ctx.channel.id}>, `{ctx.guild.name}` (`{ctx.guild.id}`)", color="03b2f8")
         rlembed.set_timestamp()
         rlhook.add_embed(rlembed)
-        rlhook.execute()
+        await rlhook.execute()
 
 def setup(bot):
     bot.add_cog(rls(bot))
