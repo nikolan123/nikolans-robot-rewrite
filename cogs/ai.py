@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import BucketType
 import requests
 import g4f
 from time import sleep
@@ -10,6 +11,7 @@ class ai(commands.Cog):
         self._last_member = None
 
     @commands.slash_command(name="ai", description="Generates text using AI")
+    @commands.cooldown(1, 6, BucketType.user)
     async def aicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="The prompt for the ai")): # type: ignore
         #send loading embed
         embed = discord.Embed(title="Generating, please wait...", colour=0x00B0F4)
