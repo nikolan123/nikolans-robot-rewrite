@@ -38,7 +38,7 @@ class pingcmd(commands.Cog):
     @commands.slash_command(name="debug_info", description="Shows info about the bot")
     @commands.cooldown(1, 15, BucketType.user)
     async def info(self, ctx):
-        await ctx.respond("Busy")
+        await ctx.respond("Fetching...")
         pycpuinf = cpuinfo.get_cpu_info()
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
@@ -48,20 +48,30 @@ class pingcmd(commands.Cog):
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         async def neofetch(interaction):
             #find / -name neofetch 2> /dev/null
-            p = remove_escape_sequences(subprocess.check_output(['/run/host/usr/bin/neofetch', '--off']).decode("utf-8"))
+            if os.name == 'nt':
+                return await interaction.respond("Running under Windows host :(")
+            p = remove_escape_sequences(subprocess.check_output(['neofetch', '--off']).decode("utf-8"))
             embed = discord.Embed(title='neofetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglc(interaction):
             #find / -name ping 2> /dev/null
             await interaction.respond('Pinging `localhost`...')
-            p = subprocess.check_output(['/run/host/usr/bin/ping', 'localhost', '-c', '4']).decode('utf-8')
-            embed = discord.Embed(title='ping localhost -c 4', description=f"```{p}```")
+            if os.name == 'nt':
+                pingcmd = ['ping', 'api.nikolan.xyz']
+            else:
+                pingcmd = ['ping', 'api.nikolan.xyz', '-c', '4']
+            p = subprocess.check_output(pingcmd).decode('utf-8')
+            embed = discord.Embed(title='ping localhost', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglcn(interaction):
             #find / -name ping 2> /dev/null
             await interaction.respond('Pinging `api.nikolan.xyz`...')
-            p = subprocess.check_output(['/run/host/usr/bin/ping', 'api.nikolan.xyz', '-c', '4']).decode('utf-8')
-            embed = discord.Embed(title='ping api.nikolan.xyz -c 4', description=f"```{p}```")
+            if os.name == 'nt':
+                pingcmd = ['ping', 'api.nikolan.xyz']
+            else:
+                pingcmd = ['ping', 'api.nikolan.xyz', '-c', '4']
+            p = subprocess.check_output(pingcmd).decode('utf-8')
+            embed = discord.Embed(title='ping api.nikolan.xyz', description=f"```{p}```")
             await interaction.respond(embed=embed)
         thev = discord.ui.View()
         butb = Button(label="Neofetch", style=discord.ButtonStyle.blurple)
