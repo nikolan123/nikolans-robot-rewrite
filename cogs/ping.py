@@ -9,6 +9,7 @@ import sympy as sp
 import cpuinfo
 import subprocess
 import re
+import asyncio
 import random
 
 def randocd():
@@ -17,6 +18,7 @@ def randocd():
     blue = random.randint(0, 255)
     hexy = "{:02x}{:02x}{:02x}".format(red, green, blue)
     return hexy
+
 def remove_escape_sequences(text):
     pattern = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
     cleaned_lines = []
@@ -24,6 +26,18 @@ def remove_escape_sequences(text):
         cleaned_line = pattern.sub('', line).rstrip('\t ').rstrip()
         cleaned_lines.append(cleaned_line)
     return '\n'.join(cleaned_lines)
+
+async def check_output(*args, **kwargs):
+    p = await asyncio.create_subprocess_exec(
+        *args, 
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+        **kwargs,
+    )   
+    stdout_data, stderr_data = await p.communicate()
+    if p.returncode == 0:
+        return stdout_data
+
 class pingcmd(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -50,29 +64,46 @@ class pingcmd(commands.Cog):
             #find / -name neofetch 2> /dev/null
             if os.name == 'nt':
                 return await interaction.respond("Running under Windows host :(")
-            p = remove_escape_sequences(subprocess.check_output(['neofetch', '--off']).decode("utf-8"))
+            p = remove_escape_sequences(await check_output(['neofetch', '--off']).decode("utf-8"))
             embed = discord.Embed(title='neofetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglc(interaction):
             #find / -name ping 2> /dev/null
             await interaction.respond('Pinging `localhost`...')
             if os.name == 'nt':
-                pingcmd = ['ping', 'api.nikolan.xyz']
+                pingcmd = 'ping localhost'
             else:
-                pingcmd = ['ping', 'api.nikolan.xyz', '-c', '4']
-            p = subprocess.check_output(pingcmd).decode('utf-8')
-            embed = discord.Embed(title='ping localhost', description=f"```{p}```")
-            await interaction.respond(embed=embed)
+                pingcmd = 'ping localhost -c 4'
+            proc = await asyncio.create_subprocess_shell(
+                pingcmd,
+                stderr=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await proc.communicate()
+            if stdout:
+                embed = discord.Embed(title='ping localhost', description=f"```{stdout.decode('utf-8')}```")
+                await interaction.respond(embed=embed)
+            else:
+                await interaction.respond("An error occured.")
+
         async def pinglcn(interaction):
             #find / -name ping 2> /dev/null
             await interaction.respond('Pinging `api.nikolan.xyz`...')
             if os.name == 'nt':
-                pingcmd = ['ping', 'api.nikolan.xyz']
+                pingcmd = 'ping api.nikolan.xyz'
             else:
-                pingcmd = ['ping', 'api.nikolan.xyz', '-c', '4']
-            p = subprocess.check_output(pingcmd).decode('utf-8')
-            embed = discord.Embed(title='ping api.nikolan.xyz', description=f"```{p}```")
-            await interaction.respond(embed=embed)
+                pingcmd = 'ping api.nikolan.xyz -c 4'
+            proc = await asyncio.create_subprocess_shell(
+                pingcmd,
+                stderr=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE
+            )
+            stdout, stderr = await proc.communicate()
+            if stdout:
+                embed = discord.Embed(title='ping api.nikolan.xyz', description=f"```{stdout.decode('utf-8')}```")
+                await interaction.respond(embed=embed)
+            else:
+                await interaction.respond("An error occured.")
         thev = discord.ui.View()
         butb = Button(label="Neofetch", style=discord.ButtonStyle.blurple)
         butb.callback = neofetch
