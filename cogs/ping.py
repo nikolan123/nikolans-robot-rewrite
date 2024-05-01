@@ -27,17 +27,6 @@ def remove_escape_sequences(text):
         cleaned_lines.append(cleaned_line)
     return '\n'.join(cleaned_lines)
 
-async def check_output(*args, **kwargs):
-    p = await asyncio.create_subprocess_exec(
-        *args, 
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-        **kwargs,
-    )   
-    stdout_data, stderr_data = await p.communicate()
-    if p.returncode == 0:
-        return stdout_data
-
 class pingcmd(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -64,7 +53,7 @@ class pingcmd(commands.Cog):
             #find / -name neofetch 2> /dev/null
             if os.name == 'nt':
                 return await interaction.respond("Running under Windows host :(")
-            p = remove_escape_sequences(check_output(['neofetch', '--off']).decode("utf-8"))
+            p = remove_escape_sequences(await subprocess.check_output(['neofetch', '--off']).decode("utf-8"))
             embed = discord.Embed(title='neofetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglc(interaction):
