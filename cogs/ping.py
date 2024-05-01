@@ -64,7 +64,7 @@ class pingcmd(commands.Cog):
             #find / -name neofetch 2> /dev/null
             if os.name == 'nt':
                 return await interaction.respond("Running under Windows host :(")
-            p = remove_escape_sequences(await check_output(['neofetch', '--off']).decode("utf-8"))
+            p = remove_escape_sequences(check_output(['neofetch', '--off']).decode("utf-8"))
             embed = discord.Embed(title='neofetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglc(interaction):
