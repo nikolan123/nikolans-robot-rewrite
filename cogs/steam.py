@@ -14,7 +14,7 @@ class steams(commands.Cog):
     @commands.slash_command(name="randomgame", description="Sends a random Steam game")
     async def randst(self, ctx):
         try:
-            with open('data/steam.json', 'r') as steamfile:
+            with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
                 thegames = thejsons["applist"]["apps"]
                 thegame = random.choice(thegames)
@@ -45,7 +45,7 @@ class steams(commands.Cog):
     @commands.slash_command(name="steamsearch", description="Searches for games on Steam")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
-            with open('data/steam.json', 'r') as steamfile:
+            with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
                 thegames = thejsons["applist"]["apps"]
                 
@@ -87,7 +87,7 @@ class steams(commands.Cog):
     @commands.slash_command(name="steamgame", description="Searches for a game on Steam")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
-            with open('data/steam.json', 'r') as steamfile:
+            with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
                 thegames = thejsons["applist"]["apps"]
                 thegame = "uknoy :()"
