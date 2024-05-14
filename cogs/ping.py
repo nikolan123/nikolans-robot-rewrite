@@ -172,7 +172,11 @@ Custom built (R5-3600/6500XT)
     @commands.slash_command(name="calc", description="Maths")
     async def calcuyy(self, ctx, thingy: discord.Option(str, "...", name="expression")): # type: ignore
         try:
+            if not all(char.isdigit() or char in "+-*/.()" for char in thingy):
+                raise ValueError("Invalid input! Please provide a valid mathematical expression.")
+
             expr = sp.sympify(thingy)
+            
             if isinstance(expr, int):
                 fresulty = str(expr)
             else:
@@ -180,11 +184,14 @@ Custom built (R5-3600/6500XT)
 
             embed = discord.Embed(colour=0x00b0f4, title="Math Solver", description=f"{thingy} = **{fresulty}**")
             await ctx.respond(embed=embed)
+        except ValueError as e:
+            embed = discord.Embed(colour=0xff0000, title='Error! Invalid input', description=str(e))
+            await ctx.respond(embed=embed)
         except sp.SympifyError as e:
             embed = discord.Embed(colour=0xff0000, title='Error! Invalid input', description=str(e))
             await ctx.respond(embed=embed)
         except Exception as e:
-            embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=e)
+            embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=str(e))
             await ctx.respond(embed=embed)
 
     @commands.slash_command(name='about', description='Shows info about the bot')
