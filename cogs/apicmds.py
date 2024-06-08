@@ -150,7 +150,7 @@ class apicmds(commands.Cog):
 
     @commands.slash_command(name="random-gpu", description="Sends a random Nvidia or AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def random_cpu(self, ctx):
+    async def random_gpu(self, ctx):
         await ctx.defer(ephemeral=False)
 
         if random.choice(["nvidia", "amd"]) == "nvidia":
