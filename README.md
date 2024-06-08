@@ -1,6 +1,18 @@
 # nikolan's robot rewrite
 My Discord bot :3 it sucks
 
+## Credits
+### Current Version
+- [**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer
+- [**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n
+- [**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs
+  
+### Old Version
+- [**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer
+- [**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff
+- [**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up
+- [**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot
+
 ## Dependencies
 The following dependencies are required to run the bot:\
 `py-cord g4f requests aiohttp bing_image_urls discord_webhook py-cpuinfo curl_cffi sympy aiofiles`\
