@@ -40,7 +40,10 @@ class steams(commands.Cog):
                 await ctx.respond(embed=embed, view=view)
 
         except Exception as e:
-            await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="steamsearch", description="Searches for games on Steam.")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
@@ -82,7 +85,10 @@ class steams(commands.Cog):
                 await message.edit(view=view)
 
         except Exception as e:
-            await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
     
     @commands.slash_command(name="steamgame", description="Searches for a game on Steam.")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
@@ -101,7 +107,10 @@ class steams(commands.Cog):
                 embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
                 await ctx.respond(embed=embed)
         except Exception as e:
-            await ctx.respond(f"An error has occured: ```{e}```Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
 class MyView(discord.ui.View):
     def __init__(self, current_page, total_pages, thesearch, chunks):
