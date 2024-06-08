@@ -16,11 +16,18 @@ class apicmds(commands.Cog):
                     if response.status == 200:
                         return await response.json()
                     else:
-                        await ctx.respond(f"Failed to fetch data from the API. Please contact @{self.bot.ownername}. Status code: {response.status}")
+                        embed = discord.Embed(title = "Error", description = f"Failed to fetch data from the API. Please contact @{self.bot.ownername}.")
+                        embed.add_field(name = "Status Code", value = response.status)
+                        embed.color = discord.Colour.red()
+                        await ctx.respond(embed=embed)
         except aiohttp.ClientError:
-            await ctx.respond(f"An error occurred while fetching data from the API. Please contact @{self.bot.ownername}")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching data from the API. Please contact @{self.bot.ownername}.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
         except asyncio.TimeoutError:
-            await ctx.respond(f"The request to the API timed out. Please contact @{self.bot.ownername}")
+            embed = discord.Embed(title = "Error", description = f"The request to the API timed out. Please contact @{self.bot.ownername}.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="intel-cpu", description="Sends a random Intel CPU")
     @commands.cooldown(1, 3, BucketType.user)
@@ -36,7 +43,9 @@ class apicmds(commands.Cog):
                 embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/intel-cpu")
                 await ctx.respond(embed=embed)
             else:
-                await ctx.respond("Failed to fetch CPU information from the API.")
+                embed = discord.Embed(title = "Error", description = f"An error occurred while fetching CPU data from the API. Try again later.")
+                embed.color = discord.Colour.red()
+                await ctx.respond(embed=embed)
 
     @commands.slash_command(name="amd-cpu", description="Sends a random AMD CPU")
     @commands.cooldown(1, 3, BucketType.user)
@@ -69,7 +78,9 @@ class apicmds(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-cpu")
             await ctx.respond(embed=embed)
         else:
-            await ctx.respond("Failed to fetch CPU information from the API.")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching CPU data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="amd-gpu", description="Sends a random AMD GPU")
     @commands.cooldown(1, 3, BucketType.user)
@@ -93,7 +104,9 @@ class apicmds(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-gpu")
             await ctx.respond(embed=embed)
         else:
-            await ctx.respond("Failed to fetch GPU information from the API.")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="nvidia-gpu", description="Sends a random Nvidia GPU")
     @commands.cooldown(1, 3, BucketType.user)
@@ -107,6 +120,10 @@ class apicmds(commands.Cog):
             embed = discord.Embed(title=gpuname, color=0x00ff00)
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/nvidia-gpu")
             await ctx.respond(embed=embed)
+        else:
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="95cdkey", description="Generates a Windows 95 CD Key")
     @commands.cooldown(1, 3, BucketType.user)
@@ -118,6 +135,10 @@ class apicmds(commands.Cog):
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/95cdkey")
             embed.set_thumbnail(url="https://64.media.tumblr.com/f0b0786998dc2e44bfe179e9da3fa116/39dad773e2bb50bc-4c/s540x810/3534cc436c2b90f526bd483f632d0ff804a80e7b.gif")
             await ctx.respond(embed=embed)
+        else:
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching key data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="8ball", description="yes")
     @commands.cooldown(1, 3, BucketType.user)
@@ -128,15 +149,23 @@ class apicmds(commands.Cog):
             embed = discord.Embed(title="🎱 8ball", color=0x2494A1, description=f"❓ Question: {texty}\n**🎱 8ball: {data['answer']}**")
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/8ball")
             await ctx.respond(embed=embed)
+        else:
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching 8 ball data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="scramble", description="Scrambles text")
     @commands.cooldown(1, 3, BucketType.user)
-    async def scrmbol(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble")): # type: ignore
+    async def scrmbol(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
         endpoint = f"https://api.nikolan.xyz/scramble?text={texty}"
         data = await self.fetch_data(ctx, endpoint)
         if data:
             embed = discord.Embed(title="Scramble", color=0x2494A1, description=f"Oops I scrambled it: {data['scrambled_text']}")
             embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/scramble")
+            await ctx.respond(embed=embed)
+        else:
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching scrambled data from the API. Try again later.")
+            embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
 def setup(bot):
