@@ -90,7 +90,9 @@ class dadbg(commands.Cog):
             else:
                 await ctx.respond("Command not found.")
         else:
-            await ctx.respond("Sorry, you don't have permission to run this command.", ephemeral=True)
+            embed = discord.Embed(title = "Blocked", description = f"Sorry, you don't have permission to run this command.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(dadbg(bot))
