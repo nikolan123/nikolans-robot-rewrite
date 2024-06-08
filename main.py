@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import logging
+import os
 
 # logger = logging.getLogger('discord')
 # logger.setLevel(logging.DEBUG)
@@ -35,7 +36,6 @@ async def blacklist_check(ctx):
         await ctx.respond(embed=embed, ephemeral=True) # tells user they is blacklisted
         return False # tells command not to execute
     return True # tells command to executey bc user isnt blacklisted
-
 
 cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
