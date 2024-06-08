@@ -14,7 +14,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(name="help", description="Shows the bot's commands")
+    @commands.slash_command(name="help", description="Shows the bot's commands.")
     async def hefflp(self, ctx, commandsys: discord.Option(str, name="command", autocomplete=autocompletehelp, description="(optional) The command to get help for") = None): # type: ignore
         if commandsys == None:
             try:
@@ -73,7 +73,9 @@ class Help(commands.Cog):
                 thev.add_item(butb)
                 await ctx.respond(embed=embed,view=thev)
             except Exception as e:
-                await ctx.respond(f"The command fucking broke fix pls: {e}")
+                embed = discord.Embed(title = "Error", description = f"Command broke!\n\n{e}")
+                embed.color = discord.Colour.red()
+                await ctx.respond(embed=embed, ephemeral=True)
         else:
             try:
                 with open('data/help.csv', 'r') as thefile:
@@ -86,6 +88,9 @@ class Help(commands.Cog):
                             return
                 await ctx.respond('Command not found.')
             except Exception as e:
-                await ctx.respond(f'The command broke fucking fix it pls: {e}')
+                embed = discord.Embed(title = "Error", description = f"Command broke!\n\n{e}")
+                embed.color = discord.Colour.red()
+                await ctx.respond(embed=embed, ephemeral=True)
+
 def setup(bot):
     bot.add_cog(Help(bot))

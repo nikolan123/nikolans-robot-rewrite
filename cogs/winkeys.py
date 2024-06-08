@@ -22,7 +22,7 @@ class winkeyss(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="winkey", description="Returns a Generic Windows Key")
+    @commands.slash_command(name="winkey", description="Returns a Generic Windows Key.")
     async def winkeycmd(self, ctx, the: discord.Option(str, name="version", description="The Windows version to get a key for", autocomplete=getoss)): # type: ignore
         async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
             reader = csv.reader(await csvfile.readlines())
@@ -32,7 +32,10 @@ class winkeyss(commands.Cog):
                     embed.set_footer(text='All information provided by this command is legal and not considered piracy, the keys do not activate Windows and are taken from an official Microsoft page (learn.microsoft.com/windows-server/get-started/kms-client-activation-keys).')
                     await ctx.respond(embed=embed)
                     return
-        await ctx.respond("Not found. Please, use one of the options.")
+        
+        embed = discord.Embed(title = "Not Found", description = f"Please use an available option.")
+        embed.color = discord.Colour.red()
+        await ctx.respond(embed=embed, ephemeral=True)
                     
 
 def setup(bot):

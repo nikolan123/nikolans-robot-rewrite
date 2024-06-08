@@ -10,12 +10,62 @@ import logging
 
 bot = discord.Bot(intents=discord.Intents.all())
 
-bot.rulers = ["767780952436244491", "1118973285766533250"]
-bot.logginghook = "https://discord.com/api/webhooks/f"
-bot.suggestionshook = "https://discord.com/api/webhooks/f"
-bot.logginghookname = "nikolan's robot logging"
-bot.supportserver = "https://discord.gg/rgYmNt5BSg"
-bot.ownername = "nikolan"
+# Bot Setup
+intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
+bot = commands.Bot(intents = intents, command_prefix = '')
+
+def readconfigfile(path):
+    #Make dicts global
+    global hooks_dict, options_dict
+
+    # Set up reader
+    import configparser
+    config = configparser.RawConfigParser()
+
+    # Read options section of config file, add it to dict
+    try:
+        config.read(path)
+        hooks_dict = dict(config.items('WEBHOOKS'))
+    except Exception:
+        print("[INIT] Config file malformed: Error while reading Tokens section! The file may be missing or malformed.")
+        exit()
+
+    # Read path section of config file, add it to dict
+    try:
+        config.read(path)
+        options_dict = dict(config.items('OPTIONS'))
+    except Exception:
+        print("[INIT] Config file malformed: Error while reading Options section! The file may be missing or malformed.")
+        exit()
+
+print("[INIT] Reading config files.")
+
+# Read config files
+readconfigfile('config.cfg')
+
+# Config File Vars
+try:
+    bot.logginghook = hooks_dict['logging-hook']
+    bot.logginghookname = hooks_dict['logging-hook-name']
+    bot.suggestionshook = hooks_dict['suggestions-hook']
+    
+    bot.botToken = str(options_dict['bot-token'])
+    bot.dbgAccess = options_dict['dbg-access'].split(",")
+    bot.supportserver = options_dict['support-server']
+    bot.ownername = options_dict['owner-name']
+except Exception as error:
+    print("[INIT] Bad value in config file! Exiting.")
+    print(error)
+    exit()
+
+# bot.dbgAccess = ["767780952436244491", "1118973285766533250"]
+# bot.logginghook = "https://discord.com/api/webhooks/f"
+# bot.suggestionshook = "https://discord.com/api/webhooks/f"
+# bot.logginghookname = "nikolan's robot logging"
+# bot.supportserver = "https://discord.gg/rgYmNt5BSg"
+# bot.ownername = "nikolan"
 
 # code for the blacklist check
 blacklisted = [] # make empty array
@@ -36,7 +86,6 @@ async def blacklist_check(ctx):
         return False # tells command not to execute
     return True # tells command to executey bc user isnt blacklisted
 
-
 cogs = ['ping', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
     try:
@@ -49,4 +98,4 @@ for h in cogs:
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
 
-bot.run("f")
+bot.run(bot.botToken)

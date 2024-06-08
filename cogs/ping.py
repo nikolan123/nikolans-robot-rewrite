@@ -32,13 +32,13 @@ class pingcmd(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="ping", description="Shows the bot latency")
+    @commands.slash_command(name="ping", description="Shows the bot latency.")
     async def ping(self, ctx):
         embed = discord.Embed(title="Pong!", description=f"{round(self.bot.latency*1000)}ms", colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="debug_info", description="Shows info about the bot")
+    @commands.slash_command(name="debug_info", description="Shows info about the bot.")
     @commands.cooldown(1, 15, BucketType.user)
     async def info(self, ctx):
         await ctx.respond("Fetching...")
@@ -110,7 +110,7 @@ class pingcmd(commands.Cog):
         embed = discord.Embed(color=0xff0000, url=f"https://top.gg/bot/{self.bot.user.id}", title="Top.gg", description="Please, upvote the bot in Top.gg!")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="credits", description="Shows the credits")
+    @commands.slash_command(name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0x00b0f4)
         embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
@@ -127,7 +127,7 @@ Custom built (R5-3600/6500XT)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="pipeyhit", description="Hits someone with metal pipey")
+    @commands.slash_command(name="pipeyhit", description="Hits someone with metal pipey.")
     async def pipeyhit(self, ctx, victim: discord.Option(discord.User, "The user you want to hit"), pingusr: discord.Option(bool, name="ping", description="Ping the victim") = False): # type: ignore
         embed = discord.Embed(
             title="Metal Pipey Hit",
@@ -137,13 +137,17 @@ Custom built (R5-3600/6500XT)
         embed.set_thumbnail(
             url="https://static.wikia.nocookie.net/object-trek/images/0/0c/Pipey.png/revision/latest/scale-to-width/360?cb=20170904212026"
         )
-        await ctx.respond("Done!", ephemeral=True)
+        
+        embedDone = discord.Embed(title = "Done!")
+        embedDone.color = discord.Colour.green()
+        await ctx.respond(embed=embedDone, ephemeral=True)
+        
         if pingusr:
             await ctx.send(embed=embed, content=victim.mention)
         else:
             await ctx.send(embed=embed)
 
-    @commands.slash_command(name="members", description="Shows the server's member count")
+    @commands.slash_command(name="members", description="Shows the server's member count.")
     async def members(self, ctx):
         bot_count = sum(1 for member in ctx.guild.members if member.bot)
         member_count = sum(1 for member in ctx.guild.members if not member.bot)
@@ -159,7 +163,7 @@ Custom built (R5-3600/6500XT)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="sleep", description="Tells others you're going to sleep")
+    @commands.slash_command(name="sleep", description="Tells others you're going to sleep.")
     async def sleep(self, ctx):
         embed = discord.Embed(
             title=f"{ctx.author.name} is going to sleep",
@@ -194,12 +198,12 @@ Custom built (R5-3600/6500XT)
             embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=str(e))
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name='about', description='Shows info about the bot')
+    @commands.slash_command(name='about', description='Shows info about the bot.')
     async def botinfosy(self, ctx):
         await ctx.defer(ephemeral=False)
         #credits embed
         bcredits = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0xffffff)
-        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
+        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs")
         bcredits.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
         #camputers embed
         camputers = discord.Embed(colour=0x00ff0d, title="Camputers", description="These are all the camputers the bot was developed on")
@@ -211,6 +215,7 @@ Huawei MateBook D14
 Fujitsu Stylistic Q702
 Custom built (i3-12100/RX7600)
 Custom built (R5-3600/6500XT)
+Custom built (R9-5900X/7800XT)
 """)
         #history embed
         histembed = discord.Embed(colour=0xff0000, title="Bot Development History", description="""
@@ -232,7 +237,7 @@ Custom built (R5-3600/6500XT)
         view.add_item(topbuton)
         await ctx.respond(embeds=embedlist, view=view)
 
-    @commands.slash_command(name='randoc', description='Generates a random color')
+    @commands.slash_command(name='random-color', description='Generates a random color')
     async def random_color(self, ctx):
         red = random.randint(0, 255)
         green = random.randint(0, 255)

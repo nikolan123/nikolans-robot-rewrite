@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType
+from discord.ui import View
 import requests
 import g4f
 import aiohttp
@@ -12,9 +13,9 @@ class ai(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="ai", description="Generates text using AI")
+    @commands.slash_command(name="ai", description="Generates text using AI.")
     @commands.cooldown(1, 6, BucketType.user)
-    async def aicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="The prompt for the ai")): # type: ignore
+    async def aicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="Your prompt for the AI.")): # type: ignore
         #send loading embed
         embed = discord.Embed(title="Generating, please wait...", colour=0x00B0F4)
         embed.set_thumbnail(
@@ -48,9 +49,14 @@ class ai(commands.Cog):
                 "content-type": "multipart/form-data; boundary=---011000010111000001101001"
             }
             response = requests.post(url, data=payload, headers=headers)
-            ufembed = discord.Embed(url=response.url, title="Click to view response", description="The AI's response was over 2000 characters, so it was uploaded to a [third-party website](https://upaste.de).", colour=0x00B0F4)
+            
+            ufembed = discord.Embed(title="Response Uploaded", description="The AI's response was over 2000 characters, so it was uploaded to a [third-party website](https://upaste.de).", colour=0x00B0F4)
             ufembed.set_footer(text=f"Requested by {ctx.author.name}")
-            await ctx.edit(embed=ufembed)
+            
+            view = View()
+            view.add_item(discord.ui.Button(label = "View Response", url = response.url, style = discord.ButtonStyle.url))
+
+            await ctx.edit(embed=ufembed, view = view)
             return
         dembed = discord.Embed(description=aresponse, color=0x00B0F4)
         dembed.set_footer(text=f"Requested by {ctx.author.name}")

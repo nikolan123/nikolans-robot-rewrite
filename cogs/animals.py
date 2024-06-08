@@ -8,7 +8,7 @@ class animalz(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="doggo", description="Sends a random dog picture")
+    @commands.slash_command(name="doggo", description="Sends a random dog picture.")
     @commands.cooldown(1, 3, BucketType.user)
     async def doggocmd(self, ctx):
         endpoint = "https://dog.ceo/api/breeds/image/random"
@@ -21,8 +21,12 @@ class animalz(commands.Cog):
                     embed.set_footer(text=f"Requested by {ctx.author.name}")
                     await ctx.respond(embed=embed)
                 else:
-                    await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
-    @commands.slash_command(name="dogfact", description="Sends a random dog fact")
+                    embed = discord.Embed(title = "Error", description = "Failed to fetch data from the API.")
+                    embed.add_field(name = "Status Code", value = response.status)
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
+    
+    @commands.slash_command(name="dogfact", description="Sends a random dog fact.")
     @commands.cooldown(1, 3, BucketType.user)
     async def dogfactc(self, ctx):
         endpoint = "https://dogapi.dog/api/v2/facts"
@@ -35,8 +39,10 @@ class animalz(commands.Cog):
                     embed.set_footer(text=f"Requested by {ctx.author.name}")
                     await ctx.respond(embed=embed)
                 else:
-                    await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
+                    embed = discord.Embed(title = "Error", description = "Failed to fetch data from the API.")
+                    embed.add_field(name = "Status Code", value = response.status)
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
 
-        
 def setup(bot):
     bot.add_cog(animalz(bot))

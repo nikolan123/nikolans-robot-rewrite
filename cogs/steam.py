@@ -11,7 +11,7 @@ class steams(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="randomgame", description="Sends a random Steam game")
+    @commands.slash_command(name="randomgame", description="Sends a random Steam game.")
     async def randst(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -30,7 +30,10 @@ class steams(commands.Cog):
                         await interaction.response.edit_message(embed=new_embed)
 
                     except Exception as e:
-                        await interaction.response.edit_message(content=f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+                        embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+                        embed.add_field(name = "Error Info", value = e)
+                        embed.color = discord.Colour.red()
+                        await interaction.response.edit_message(embed=embed)
 
                 view = discord.ui.View()
                 button = discord.ui.Button(label="Get Another Random Game", style=discord.ButtonStyle.primary)
@@ -40,9 +43,12 @@ class steams(commands.Cog):
                 await ctx.respond(embed=embed, view=view)
 
         except Exception as e:
-            await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="steamsearch", description="Searches for games on Steam")
+    @commands.slash_command(name="steamsearch", description="Searches for games on Steam.")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -54,7 +60,9 @@ class steams(commands.Cog):
                 matched_games.sort(key=lambda x: x['name'].lower().index(thesearch.lower()))
                 
                 if not matched_games:
-                    await ctx.respond("No games found.")
+                    embed = discord.Embed(title = "Error", description = f"Couldn't find any results.")
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
                     return
                 
                 # pagination
@@ -82,9 +90,12 @@ class steams(commands.Cog):
                 await message.edit(view=view)
 
         except Exception as e:
-            await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
     
-    @commands.slash_command(name="steamgame", description="Searches for a game on Steam")
+    @commands.slash_command(name="steamgame", description="Searches for a game on Steam.")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -95,13 +106,18 @@ class steams(commands.Cog):
                     if game['name'].lower() == thesearch.lower():
                         thegame = game
                 if thegame == 'uknoy :()':
-                    await ctx.respond('Game not found. Please enter exact name')
+                    embed = discord.Embed(title = "Error", description = f"Couldn't find that game. Please enter the exact name.")
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
                     return
                 embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                 embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
                 await ctx.respond(embed=embed)
         except Exception as e:
-            await ctx.respond(f"An error has occured: ```{e}```Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name = "Error Info", value = e)
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
 
 class MyView(discord.ui.View):
     def __init__(self, current_page, total_pages, thesearch, chunks):

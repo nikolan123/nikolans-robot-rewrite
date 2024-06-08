@@ -14,11 +14,11 @@ class dadbg(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
-        self.rulers = bot.rulers
+        self.dbgAccess = bot.dbgAccess
         
-    @commands.slash_command(name="dbg", description="Debug console for the bot, ignore unless you are a developer")
+    @commands.slash_command(name="dbg", description="Debug console for the bot, ignore unless you are a developer.")
     async def dbgcmdy(self, ctx, commandy: discord.Option(str, name="command", description="The command you want to run"), arg1: discord.Option(str, name="arg", description="The argument for the command") = None): # type: ignore
-        if str(ctx.author.id) in self.rulers:
+        if str(ctx.author.id) in self.dbgAccess:
             #ping command
             if commandy == "ping":
                 if not arg1 == None:
@@ -40,7 +40,7 @@ class dadbg(commands.Cog):
             elif commandy == "blacklist":
                 if not arg1 == None:
                     arg1 = arg1.replace("<", "").replace("@", "").replace(">", "")
-                    if str(arg1) == str(self.bot.rulers[0]):
+                    if str(arg1) == str(self.bot.dbgAccess[0]):
                         await ctx.respond("You can't blacklist the main ruler.")
                         return
                     else:
@@ -90,7 +90,9 @@ class dadbg(commands.Cog):
             else:
                 await ctx.respond("Command not found.")
         else:
-            await ctx.respond("Sorry, you don't have permission to run this command.", ephemeral=True)
+            embed = discord.Embed(title = "Blocked", description = f"Sorry, you don't have permission to run this command.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(dadbg(bot))
