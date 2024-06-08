@@ -233,7 +233,7 @@ Custom built (R9-5900X/7800XT)
         view.add_item(topbuton)
         await ctx.respond(embeds=embedlist, view=view)
 
-    @commands.slash_command(name='randoc', description='Generates a random color')
+    @commands.slash_command(name='random-color', description='Generates a random color')
     async def random_color(self, ctx):
         red = random.randint(0, 255)
         green = random.randint(0, 255)
