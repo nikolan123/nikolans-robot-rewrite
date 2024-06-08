@@ -30,7 +30,10 @@ class steams(commands.Cog):
                         await interaction.response.edit_message(embed=new_embed)
 
                     except Exception as e:
-                        await interaction.response.edit_message(content=f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
+                        embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+                        embed.add_field(name = "Error Info", value = e)
+                        embed.color = discord.Colour.red()
+                        await interaction.response.edit_message(embed=embed)
 
                 view = discord.ui.View()
                 button = discord.ui.Button(label="Get Another Random Game", style=discord.ButtonStyle.primary)
@@ -57,7 +60,9 @@ class steams(commands.Cog):
                 matched_games.sort(key=lambda x: x['name'].lower().index(thesearch.lower()))
                 
                 if not matched_games:
-                    await ctx.respond("No games found.")
+                    embed = discord.Embed(title = "Error", description = f"Couldn't find any results.")
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
                     return
                 
                 # pagination
@@ -101,7 +106,9 @@ class steams(commands.Cog):
                     if game['name'].lower() == thesearch.lower():
                         thegame = game
                 if thegame == 'uknoy :()':
-                    await ctx.respond('Game not found. Please enter exact name')
+                    embed = discord.Embed(title = "Error", description = f"Couldn't find that game. Please enter the exact name.")
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
                     return
                 embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                 embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
