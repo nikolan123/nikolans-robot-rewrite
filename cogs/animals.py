@@ -21,7 +21,11 @@ class animalz(commands.Cog):
                     embed.set_footer(text=f"Requested by {ctx.author.name}")
                     await ctx.respond(embed=embed)
                 else:
-                    await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
+                    embed = discord.Embed(title = "Error", description = "Failed to fetch data from the API.")
+                    embed.add_field(name = "Status Code", value = response.status)
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
+    
     @commands.slash_command(name="dogfact", description="Sends a random dog fact")
     @commands.cooldown(1, 3, BucketType.user)
     async def dogfactc(self, ctx):
@@ -35,8 +39,10 @@ class animalz(commands.Cog):
                     embed.set_footer(text=f"Requested by {ctx.author.name}")
                     await ctx.respond(embed=embed)
                 else:
-                    await ctx.respond(f"Failed to fetch data from the API. Status code: {response.status}")
+                    embed = discord.Embed(title = "Error", description = "Failed to fetch data from the API.")
+                    embed.add_field(name = "Status Code", value = response.status)
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
 
-        
 def setup(bot):
     bot.add_cog(animalz(bot))
