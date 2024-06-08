@@ -137,7 +137,11 @@ Custom built (R5-3600/6500XT)
         embed.set_thumbnail(
             url="https://static.wikia.nocookie.net/object-trek/images/0/0c/Pipey.png/revision/latest/scale-to-width/360?cb=20170904212026"
         )
-        await ctx.respond("Done!", ephemeral=True)
+        
+        embedDone = discord.Embed(title = "Done!")
+        embedDone.color = discord.Colour.green()
+        await ctx.respond(embed=embedDone, ephemeral=True)
+        
         if pingusr:
             await ctx.send(embed=embed, content=victim.mention)
         else:
