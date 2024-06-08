@@ -4,7 +4,7 @@ My Discord bot :3 it sucks
 ## Credits
 ### Current Version
 - [**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer
-- [**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n
+- [**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command
 - [**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs
   
 ### Old Version
