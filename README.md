@@ -26,7 +26,7 @@ If you would like to self host the bot, you can do so with the following steps:
 > When generating Bot Tokens and API Secrets, do not share them with anybody!
 
 ### Config File Setup
-1. Copy the `example-config.cfg`, and rename the copied version to `config.cfg`. This is your config file.
+1. Copy the `example-config.cfg` file, and rename the copied version to `config.cfg`. This is your config file.
 2. Enter the `config.cfg` file with a text editor, and change the values to fit you. We will generate a bot token in the next stage.
 
 ### Discord Bot Token
