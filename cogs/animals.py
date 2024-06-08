@@ -8,7 +8,7 @@ class animalz(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="doggo", description="Sends a random dog picture")
+    @commands.slash_command(name="doggo", description="Sends a random dog picture.")
     @commands.cooldown(1, 3, BucketType.user)
     async def doggocmd(self, ctx):
         endpoint = "https://dog.ceo/api/breeds/image/random"
@@ -26,7 +26,7 @@ class animalz(commands.Cog):
                     embed.color = discord.Colour.red()
                     await ctx.respond(embed=embed)
     
-    @commands.slash_command(name="dogfact", description="Sends a random dog fact")
+    @commands.slash_command(name="dogfact", description="Sends a random dog fact.")
     @commands.cooldown(1, 3, BucketType.user)
     async def dogfactc(self, ctx):
         endpoint = "https://dogapi.dog/api/v2/facts"

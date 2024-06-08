@@ -29,7 +29,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="intel-cpu", description="Sends a random Intel CPU")
+    @commands.slash_command(name="intel-cpu", description="Sends a random Intel CPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def cpur(self, ctx):
         await ctx.defer(ephemeral=False)
@@ -51,7 +51,7 @@ class apicmds(commands.Cog):
                 embed.color = discord.Colour.red()
                 await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="amd-cpu", description="Sends a random AMD CPU")
+    @commands.slash_command(name="amd-cpu", description="Sends a random AMD CPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def cpum(self, ctx):
         # Get data from API
@@ -89,7 +89,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="amd-gpu", description="Sends a random AMD GPU")
+    @commands.slash_command(name="amd-gpu", description="Sends a random AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def gpumyy(self, ctx):
         # Get data from API
@@ -118,7 +118,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="nvidia-gpu", description="Sends a random Nvidia GPU")
+    @commands.slash_command(name="nvidia-gpu", description="Sends a random Nvidia GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def nvgpu(self, ctx):
         # Get data from API
@@ -138,7 +138,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="95cdkey", description="Generates a Windows 95 CD Key")
+    @commands.slash_command(name="95cdkey", description="Generates a Windows 95 CD Key.")
     @commands.cooldown(1, 3, BucketType.user)
     async def nfcdkey(self, ctx):
         # Get data from API
@@ -173,7 +173,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="scramble", description="Scrambles text")
+    @commands.slash_command(name="scramble", description="Scrambles text.")
     @commands.cooldown(1, 3, BucketType.user)
     async def scrmbol(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
         # Get data from API

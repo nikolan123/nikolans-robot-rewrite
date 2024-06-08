@@ -11,7 +11,7 @@ class steams(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="randomgame", description="Sends a random Steam game")
+    @commands.slash_command(name="randomgame", description="Sends a random Steam game.")
     async def randst(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -42,7 +42,7 @@ class steams(commands.Cog):
         except Exception as e:
             await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
 
-    @commands.slash_command(name="steamsearch", description="Searches for games on Steam")
+    @commands.slash_command(name="steamsearch", description="Searches for games on Steam.")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -84,7 +84,7 @@ class steams(commands.Cog):
         except Exception as e:
             await ctx.respond(f"An error has occurred: ```{e}```Please DM @{self.bot.owner.name} or join [the Discord server]({self.bot.supportserver})")
     
-    @commands.slash_command(name="steamgame", description="Searches for a game on Steam")
+    @commands.slash_command(name="steamgame", description="Searches for a game on Steam.")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:

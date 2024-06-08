@@ -14,7 +14,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(name="help", description="Shows the bot's commands")
+    @commands.slash_command(name="help", description="Shows the bot's commands.")
     async def hefflp(self, ctx, commandsys: discord.Option(str, name="command", autocomplete=autocompletehelp, description="(optional) The command to get help for") = None): # type: ignore
         if commandsys == None:
             try:
