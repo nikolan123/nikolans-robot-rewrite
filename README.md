@@ -15,7 +15,7 @@ My Discord bot :3 it sucks
 
 ## Dependencies
 The following dependencies are required to run the bot:\
-`py-cord g4f requests aiohttp bing_image_urls discord_webhook py-cpuinfo curl_cffi sympy aiofiles`\
+`py-cord, g4f, requests, aiohttp, bing_image_urls, discord_webhook, py-cpuinfo, curl_cffi, sympy, aiofiles`.\
 \
 You can install these dependencies using **PIP** with the following command:\
 `pip install py-cord g4f requests aiohttp bing_image_urls discord_webhook py-cpuinfo curl_cffi sympy aiofiles`
