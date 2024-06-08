@@ -199,7 +199,7 @@ Custom built (R5-3600/6500XT)
         await ctx.defer(ephemeral=False)
         #credits embed
         bcredits = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0xffffff)
-        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
+        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs")
         bcredits.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
         #camputers embed
         camputers = discord.Embed(colour=0x00ff0d, title="Camputers", description="These are all the camputers the bot was developed on")
@@ -211,6 +211,7 @@ Huawei MateBook D14
 Fujitsu Stylistic Q702
 Custom built (i3-12100/RX7600)
 Custom built (R5-3600/6500XT)
+Custom built (R9-5900X/7800XT)
 """)
         #history embed
         histembed = discord.Embed(colour=0xff0000, title="Bot Development History", description="""
