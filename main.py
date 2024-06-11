@@ -94,6 +94,12 @@ for h in cogs:
     except Exception as e:
         print(f"Failed to load extension {h}: {e}")
 
+# Ignore non slash commands
+@bot.event
+async def on_message(message):
+    pass
+
+# Ready!
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
