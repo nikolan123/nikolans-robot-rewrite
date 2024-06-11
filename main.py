@@ -10,12 +10,6 @@ import logging
 
 bot = discord.Bot(intents=discord.Intents.all())
 
-# Bot Setup
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-bot = commands.Bot(intents = intents, command_prefix = '')
-
 def readconfigfile(path):
     #Make dicts global
     global hooks_dict, options_dict
