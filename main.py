@@ -10,12 +10,6 @@ import logging
 
 bot = discord.Bot(intents=discord.Intents.all())
 
-# Bot Setup
-intents = discord.Intents.default()
-intents.message_content = True
-intents.members = True
-bot = commands.Bot(intents = intents, command_prefix = '')
-
 def readconfigfile(path):
     #Make dicts global
     global hooks_dict, options_dict
@@ -94,6 +88,7 @@ for h in cogs:
     except Exception as e:
         print(f"Failed to load extension {h}: {e}")
 
+# Ready!
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
