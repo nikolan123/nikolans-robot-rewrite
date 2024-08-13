@@ -1,17 +1,14 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import BucketType
-import aiohttp
 import random
 import json
-import chunk
 
 class steams(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="randomgame", description="Sends a random Steam game.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="randomgame", description="Sends a random Steam game.")
     async def randst(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -48,7 +45,7 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="steamsearch", description="Searches for games on Steam.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamsearch", description="Searches for games on Steam.")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -95,7 +92,7 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
     
-    @commands.slash_command(name="steamgame", description="Searches for a game on Steam.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamgame", description="Searches for a game on Steam.")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:

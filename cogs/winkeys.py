@@ -1,8 +1,5 @@
 import discord
 from discord.ext import commands
-import requests
-import g4f
-from time import sleep
 import csv
 import aiofiles
 
@@ -22,7 +19,7 @@ class winkeyss(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="winkey", description="Returns a Generic Windows Key.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="winkey", description="Returns a Generic Windows Key.")
     async def winkeycmd(self, ctx, the: discord.Option(str, name="version", description="The Windows version to get a key for", autocomplete=getoss)): # type: ignore
         async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
             reader = csv.reader(await csvfile.readlines())

@@ -118,11 +118,11 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             return embed
 
-    @commands.slash_command(name="cpu", description="Sends a random Intel or AMD CPU.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="cpu", description="Sends a random Intel or AMD CPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def random_cpu(self, ctx):
         await ctx.defer(ephemeral=False)
-        view = discord.ui.View()
+        view = discord.ui.View(timeout=None)
         async def randintel(interaction):
             the = await self.intelcpu(ctx.author.name)
             await interaction.respond(embed=the, view=view)
@@ -142,7 +142,7 @@ class apicmds(commands.Cog):
             the = await self.amdcpu(ctx.author.name)
             return await ctx.respond(embed=the, view=view)
 
-    @commands.slash_command(name="random-gpu", description="Sends a random Nvidia or AMD GPU.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="random-gpu", description="Sends a random Nvidia or AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def random_gpu(self, ctx):
         await ctx.defer(ephemeral=False)
@@ -191,7 +191,7 @@ class apicmds(commands.Cog):
                 embed.color = discord.Colour.red()
                 await ctx.respond(embed=embed)
     
-    @commands.slash_command(name="amd-gpu", description="Sends a random AMD GPU.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="amd-gpu", description="Sends a random AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def gpumyy(self, ctx):
         # Get data from API
@@ -220,7 +220,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="nvidia-gpu", description="Sends a random Nvidia GPU.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="nvidia-gpu", description="Sends a random Nvidia GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def nvgpu(self, ctx):
         # Get data from API
@@ -240,7 +240,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="95cdkey", description="Generates a Windows 95 CD Key.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="95cdkey", description="Generates a Windows 95 CD Key.")
     @commands.cooldown(1, 3, BucketType.user)
     async def nfcdkey(self, ctx):
         # Get data from API
@@ -258,7 +258,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="8ball", description="yes")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="8ball", description="yes")
     @commands.cooldown(1, 3, BucketType.user)
     async def ebll(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
         # Get data from API
@@ -275,7 +275,7 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="scramble", description="Scrambles text.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="scramble", description="Scrambles text.")
     @commands.cooldown(1, 3, BucketType.user)
     async def scrmbol(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
         # Get data from API

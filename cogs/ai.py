@@ -4,16 +4,14 @@ from discord.ext.commands import BucketType
 from discord.ui import View
 import requests
 import g4f
-import aiohttp
 from time import sleep
-import json
 
 class ai(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="ai", description="Generates text using AI.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ai", description="Generates text using AI.")
     @commands.cooldown(1, 6, BucketType.user)
     async def aicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="Your prompt for the AI.")): # type: ignore
         #send loading embed

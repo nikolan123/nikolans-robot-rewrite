@@ -32,13 +32,13 @@ class pingcmd(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(name="ping", description="Shows the bot latency.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ping", description="Shows the bot latency.")
     async def ping(self, ctx):
         embed = discord.Embed(title="Pong!", description=f"{round(self.bot.latency*1000)}ms", colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="debug_info", description="Shows info about the bot.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="debug_info", description="Shows info about the bot.")
     @commands.cooldown(1, 15, BucketType.user)
     async def info(self, ctx):
         await ctx.respond("Fetching...")
@@ -110,7 +110,7 @@ class pingcmd(commands.Cog):
         embed = discord.Embed(color=0xff0000, url=f"https://top.gg/bot/{self.bot.user.id}", title="Top.gg", description="Please, upvote the bot in Top.gg!")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="credits", description="Shows the credits.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0x00b0f4)
         embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
@@ -157,7 +157,7 @@ Custom built (R5-3600/6500XT)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="avatar", description="Gets a user's avatar")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="avatar", description="Gets a user's avatar")
     async def avatary(self, ctx, usery: discord.Option(discord.Member, name="user", description="The user to get the avatar of")): # type: ignore
         embed = discord.Embed(title=f"{usery.name}'s Avatar", url=usery.avatar.url, image=usery.avatar.url, colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
@@ -173,7 +173,7 @@ Custom built (R5-3600/6500XT)
         embed.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/1247/1247769.png")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(name="calc", description="Maths")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="calc", description="Maths")
     async def calcuyy(self, ctx, thingy: discord.Option(str, "...", name="expression")): # type: ignore
         try:
             if not all(char.isdigit() or char in "+-*/.()" for char in thingy):
@@ -237,7 +237,7 @@ Custom built (R9-5900X/7800XT)
         view.add_item(topbuton)
         await ctx.respond(embeds=embedlist, view=view)
 
-    @commands.slash_command(name='random-color', description='Generates a random color')
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name='random-color', description='Generates a random color')
     async def random_color(self, ctx):
         red = random.randint(0, 255)
         green = random.randint(0, 255)

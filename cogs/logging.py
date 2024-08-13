@@ -33,7 +33,10 @@ class rls(commands.Cog):
         else:
             fancyoptions = ''
         rlhook = AsyncDiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - commands")
-        rlembed = DiscordEmbed(title=f"{ctx.user.name} ran a command", description=f"User {ctx.author.name} ({ctx.author.id}) ran `/{ctx.command} {fancyoptions}` in <#{ctx.channel.id}>, `{ctx.guild.name}` (`{ctx.guild.id}`)", color="03b2f8")
+        if ctx.guild:
+            rlembed = DiscordEmbed(title=f"{ctx.user.name} ran a command", description=f"User {ctx.author.name} ({ctx.author.id}) ran `/{ctx.command} {fancyoptions}` in <#{ctx.channel.id}>, `{ctx.guild.name}` (`{ctx.guild.id}`)", color="03b2f8")
+        else:
+            rlembed = DiscordEmbed(title=f"{ctx.user.name} ran a command", description=f"User {ctx.author.name} ({ctx.author.id}) ran `/{ctx.command} {fancyoptions}` in <#{ctx.channel.id}>, no guild", color="03b2f8")
         rlembed.set_timestamp()
         rlhook.add_embed(rlembed)
         await rlhook.execute()
