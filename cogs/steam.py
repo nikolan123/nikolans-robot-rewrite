@@ -119,7 +119,7 @@ class steams(commands.Cog):
             await ctx.respond(embed=embed)
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamuserlookup", description="Searches for users on Steam.")
-    async def steamlookup(self, ctx, user: discord.Option(str, name='user', description='The Steam ID you want to lookup')): # type: ignore
+    async def steamlookup(self, ctx, user: discord.Option(str, name='id', description='The Steam ID you want to lookup')): # type: ignore
         pattern = r'^\d{17}$'
         if not re.match(pattern, user):
             return await ctx.respond("Please, input a valid Steam ID.")
