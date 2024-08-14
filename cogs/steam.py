@@ -13,40 +13,81 @@ class steams(commands.Cog):
 
     steamgroup = discord.SlashCommandGroup(name="steam", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
-    @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
+    @steamgroup.command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
     async def randst(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
                 thegames = thejsons["applist"]["apps"]
                 thegame = random.choice(thegames)
-                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
-                embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
+                appid = thegame['appid']
                 
-                async def callback(interaction: discord.Interaction):
+                # Fetch game data
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
+                        appinfo1 = await response.json()
+                        appinfo = appinfo1[str(appid)]['data']
+                
+                try:
+                    if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
+                        return await ctx.respond("No NSFW, please.")
+                except:
+                    pass
+                
+                appdisc = f"**{appinfo['achievements']['total'] if 'achievements' in appinfo else 'No'} achievements\nReleased {appinfo['release_date']['date']}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
+                embed = discord.Embed(title=f"{appinfo['name']}", description=html.unescape(appinfo['short_description']), url=f"https://store.steampowered.com/app/{appid}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header.jpg", colour=0x00b0f4)
+                embed.add_field(name="", value=appdisc)
+                
+                # Add button to get another random game
+                async def random_game_callback(interaction: discord.Interaction):
                     try:
                         thegame = random.choice(thegames)
-                        new_embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
-                        new_embed.set_footer(text=f"Requested by {interaction.user.name} | App ID {thegame['appid']}")
+                        appid = thegame['appid']
+                        
+                        async with aiohttp.ClientSession() as session:
+                            async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
+                                appinfo1 = await response.json()
+                                appinfo = appinfo1[str(appid)]['data']
+                        
+                        try:
+                            if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
+                                return await interaction.response.edit_message(content="No NSFW, please.")
+                        except:
+                            pass
+
+                        appdisc = f"**{appinfo['achievements']['total'] if 'achievements' in appinfo else 'No'} achievements\nReleased {appinfo['release_date']['date']}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
+                        new_embed = discord.Embed(title=f"{appinfo['name']}", description=html.unescape(appinfo['short_description']), url=f"https://store.steampowered.com/app/{appid}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header.jpg", colour=0x00b0f4)
+                        new_embed.add_field(name="", value=appdisc)
+                        new_embed.set_footer(text=f"Requested by {interaction.user.name} | App ID {appid}")
                         
                         await interaction.response.edit_message(embed=new_embed)
-
+                    
                     except Exception as e:
-                        embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
-                        embed.add_field(name = "Error Info", value = e)
-                        embed.color = discord.Colour.red()
-                        await interaction.response.edit_message(embed=embed)
-
-                view = discord.ui.View()
+                        error_embed = discord.Embed(title="Error", description=f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+                        error_embed.add_field(name="Error Info", value=e)
+                        error_embed.color = discord.Colour.red()
+                        await interaction.response.edit_message(embed=error_embed)
+                
+                view = discord.ui.View(timeout=None)
                 button = discord.ui.Button(label="Get Another Random Game", style=discord.ButtonStyle.primary)
-                button.callback = callback
+                button.callback = random_game_callback
                 view.add_item(button)
-
+                
+                if appinfo.get('website'):
+                    view.add_item(discord.ui.Button(label="Website", url=appinfo['website'], style=discord.ButtonStyle.url))
+                
+                embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {appid}")
                 await ctx.respond(embed=embed, view=view)
-
+        
         except Exception as e:
-            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
-            embed.add_field(name = "Error Info", value = e)
+            import traceback
+            traceback.print_exc()
+    
+            # Get detailed traceback information as a string
+            tb_str = traceback.format_exc()
+            print(f"Traceback details:\n{tb_str}")
+            embed = discord.Embed(title="Error", description=f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
+            embed.add_field(name="Error Info", value=e)
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
@@ -118,7 +159,12 @@ class steams(commands.Cog):
                     async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
                         appinfo1 = await response.json()
                         appinfo = appinfo1[str(appid)]['data']
-                appdisc = f"**{appinfo['achievements']['total']} achievements\nReleased {appinfo['release_date']['date']}\n{"Free" if appinfo['is_free'] is True else appinfo['price_overview']['final_formatted']}**"
+                try:
+                    if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
+                        return await ctx.respond("No NSFW, please.")
+                except:
+                    pass
+                appdisc = f"**{appinfo['achievements']['total'] if 'achievements' in appinfo else "No"} achievements\nReleased {appinfo['release_date']['date']}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
                 embed = discord.Embed(title=f"{appinfo['name']}", description=html.unescape(appinfo['short_description']), url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
                 embed.add_field(name="", value=appdisc)
                 view = discord.ui.View(timeout=None)
