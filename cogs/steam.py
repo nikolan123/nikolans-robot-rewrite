@@ -137,6 +137,8 @@ class steams(commands.Cog):
             description += f":flag_{userinfo['loccountrycode'].lower()}: {userinfo['loccountrycode']}\n"
         if 'lastlogoff' in userinfo:
             description += f"Last seen <t:{userinfo['lastlogoff']}>\n"
+        if 'timecreated' in userinfo:
+            description += f"Account Created <t:{userinfo['timecreated']}>\n"
         embed = discord.Embed(
             title=userinfo['personaname'],
             description=description,
