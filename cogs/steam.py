@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import random
 import json
+import re
+import aiohttp
 
 class steams(commands.Cog):
     def __init__(self, bot):
@@ -116,6 +118,34 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamuserlookup", description="Searches for users on Steam.")
+    async def steamlookup(self, ctx, user: discord.Option(str, name='user', description='The Steam ID you want to lookup')): # type: ignore
+        pattern = r'^\d{17}$'
+        if not re.match(pattern, user):
+            return await ctx.respond("Please, input a valid Steam ID.")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.bot.steamkey}&steamids={user}") as response:
+                if response.status == 200:
+                    thing = await response.json()
+                else:
+                    return await ctx.respond(embed=discord.Embed(title="An error occured :("))
+        if not thing['response']['players']:
+            return await ctx.respond("User not found.")
+        userinfo = thing['response']['players'][0]
+        description = ""
+        if 'loccountrycode' in userinfo:
+            description += f":flag_{userinfo['loccountrycode'].lower()}: {userinfo['loccountrycode']}\n"
+        if 'lastlogoff' in userinfo:
+            description += f"Last seen <t:{userinfo['lastlogoff']}>\n"
+        embed = discord.Embed(
+            title=userinfo['personaname'],
+            description=description,
+            url=userinfo['profileurl'],
+        )
+        embed.set_thumbnail(url=userinfo['avatarfull'])
+        embed.set_footer(text=userinfo['steamid'])
+        await ctx.respond(embed=embed)
+
 class MyView(discord.ui.View):
     def __init__(self, current_page, total_pages, thesearch, chunks):
         super().__init__()
@@ -138,18 +168,6 @@ class MyView(discord.ui.View):
             self.current_page = 0
         embed = await self.send_page(self.current_page)
         await interaction.response.edit_message(embed=embed, view=self)
-
-    async def send_page(self, page_number):
-        games_on_page = self.chunks[page_number]
-        description = ""
-        for i, game in enumerate(games_on_page):
-            number = i + 1 + (page_number * len(self.chunks[0]))
-            description += f"{number}. [{game['name']}](https://store.steampowered.com/app/{game['appid']}/)\n"
-        embed = discord.Embed(title=f"Search results for '{self.thesearch}':",
-                              description=description,
-                              color=discord.Color.blue())
-        embed.set_footer(text=f"Page {page_number + 1}/{self.total_pages}")
-        return embed
 
 def setup(bot):
     bot.add_cog(steams(bot))

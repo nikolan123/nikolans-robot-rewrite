@@ -49,6 +49,7 @@ try:
     bot.dbgAccess = options_dict['dbg-access'].split(",")
     bot.supportserver = options_dict['support-server']
     bot.ownername = options_dict['owner-name']
+    bot.steamkey = options_dict['steam-key']
 except Exception as error:
     print("[INIT] Bad value in config file! Exiting.")
     print(error)
