@@ -51,7 +51,7 @@ class animalz(commands.Cog):
     async def sandcarrmeoww(self, ctx):
         async with aiofiles.open('data/carlist.json', mode='r') as carlist:
             urls = json.loads(await carlist.read())
-        cat_titles = ["meowww :3", "mreowwww :33", "mrrrp :3", "meow :3", "nyaa~ :3", "nyaa~", ":3"]
+        cat_titles = ["meowww :3", "mreowwww :33", "mrrrp :3", "meow :3", "nyaa~ :3", "nyaa~", ":3", "rawr :3"]
         meow = random.choice(urls)
         embed = discord.Embed(title=random.choice(cat_titles), color=discord.Color.blue())
         embed.set_image(url=meow)
