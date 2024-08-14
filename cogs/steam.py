@@ -11,7 +11,9 @@ class steams(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="randomgame", description="Sends a random Steam game.")
+    steamgroup = discord.SlashCommandGroup(name="steam")
+
+    @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
     async def randst(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -48,7 +50,7 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamsearch", description="Searches for games on Steam.")
+    @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="search", description="Searches for games on Steam.")
     async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -95,7 +97,7 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamgame", description="Searches for a game on Steam.")
+    @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="game", description="Searches for a game on Steam.")
     async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
@@ -131,7 +133,7 @@ class steams(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="steamuserlookup", description="Searches for users on Steam.")
+    @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="user", description="Searches for users on Steam.")
     async def steamlookup(self, ctx, user: discord.Option(str, name='id', description='The Steam ID you want to lookup')): # type: ignore
         pattern = r'^\d{17}$'
         if not re.match(pattern, user):
