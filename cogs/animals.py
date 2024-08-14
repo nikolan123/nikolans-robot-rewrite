@@ -11,7 +11,7 @@ class animalz(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    animalgroup = discord.SlashCommandGroup(name="animals")
+    animalgroup = discord.SlashCommandGroup(name="animals", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
     @animalgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="doggo", description="Sends a random dog picture.")
     @commands.cooldown(1, 3, BucketType.user)

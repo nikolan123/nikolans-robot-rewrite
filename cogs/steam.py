@@ -11,7 +11,7 @@ class steams(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    steamgroup = discord.SlashCommandGroup(name="steam")
+    steamgroup = discord.SlashCommandGroup(name="steam", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
     async def randst(self, ctx):
