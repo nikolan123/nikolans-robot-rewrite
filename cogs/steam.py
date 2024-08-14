@@ -4,6 +4,7 @@ import random
 import json
 import re
 import aiohttp
+import html
 
 class steams(commands.Cog):
     def __init__(self, bot):
@@ -109,9 +110,21 @@ class steams(commands.Cog):
                     embed.color = discord.Colour.red()
                     await ctx.respond(embed=embed)
                     return
-                embed = discord.Embed(title=f"{thegame['name']}", url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
-                embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {thegame['appid']}")
-                await ctx.respond(embed=embed)
+                # fetch data
+                appid = thegame['appid']
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
+                        appinfo1 = await response.json()
+                        appinfo = appinfo1[str(appid)]['data']
+                appdisc = f"**{appinfo['achievements']['total']} achievements\nReleased {appinfo['release_date']['date']}\n{"Free" if appinfo['is_free'] is True else appinfo['price_overview']['final_formatted']}**"
+                embed = discord.Embed(title=f"{appinfo['name']}", description=html.unescape(appinfo['short_description']), url=f"https://store.steampowered.com/app/{thegame['appid']}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{thegame['appid']}/header.jpg", colour=0x00b0f4)
+                embed.add_field(name="", value=appdisc)
+                view = discord.ui.View(timeout=None)
+                view.add_item(discord.ui.Button(label = "Steam Page", url = f"https://store.steampowered.com/app/{thegame['appid']}/", style = discord.ButtonStyle.url))
+                if appinfo['website']:
+                    view.add_item(discord.ui.Button(label = "Website", url = appinfo['website'], style = discord.ButtonStyle.url))
+                embed.set_footer(text=f"Requested by {ctx.author.name} | App ID {appid}")
+                await ctx.respond(embed=embed, view=view)
         except Exception as e:
             embed = discord.Embed(title = "Error", description = f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
             embed.add_field(name = "Error Info", value = e)
