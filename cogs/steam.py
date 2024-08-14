@@ -80,12 +80,6 @@ class steams(commands.Cog):
                 await ctx.respond(embed=embed, view=view)
         
         except Exception as e:
-            import traceback
-            traceback.print_exc()
-    
-            # Get detailed traceback information as a string
-            tb_str = traceback.format_exc()
-            print(f"Traceback details:\n{tb_str}")
             embed = discord.Embed(title="Error", description=f"An error occurred while fetching Steam data. Please DM @{self.bot.ownername} or join [the Discord server]({self.bot.supportserver})")
             embed.add_field(name="Error Info", value=e)
             embed.color = discord.Colour.red()
