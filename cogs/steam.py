@@ -168,6 +168,18 @@ class MyView(discord.ui.View):
             self.current_page = 0
         embed = await self.send_page(self.current_page)
         await interaction.response.edit_message(embed=embed, view=self)
+    
+    async def send_page(self, page_number):
+        games_on_page = self.chunks[page_number]
+        description = ""
+        for i, game in enumerate(games_on_page):
+            number = i + 1 + (page_number * len(self.chunks[0]))
+            description += f"{number}. [{game['name']}](https://store.steampowered.com/app/{game['appid']}/)\n"
+        embed = discord.Embed(title=f"Search results for '{self.thesearch}':",
+                              description=description,
+                              color=discord.Color.blue())
+        embed.set_footer(text=f"Page {page_number + 1}/{self.total_pages}")
+        return embed
 
 def setup(bot):
     bot.add_cog(steams(bot))
