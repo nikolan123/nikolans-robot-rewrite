@@ -123,16 +123,25 @@ class apicmds(commands.Cog):
     async def random_cpu(self, ctx):
         await ctx.defer(ephemeral=False)
         view = discord.ui.View(timeout=None)
+        async def randany(interaction):
+            if random.choice(["intel", "amd"]) == "intel":
+                the = await self.intelcpu(interaction.user.name)
+            else:
+                the = await self.amdcpu(interaction.user.name)
+            await interaction.respond(embed=the, view=view)
         async def randintel(interaction):
-            the = await self.intelcpu(ctx.author.name)
+            the = await self.intelcpu(interaction.user.name)
             await interaction.respond(embed=the, view=view)
         async def randamd(interaction):
-            the = await self.amdcpu(ctx.author.name)
+            the = await self.amdcpu(interaction.user.name)
             await interaction.respond(embed=the, view=view)
+        anyb = discord.ui.Button(label="Any", style=discord.ButtonStyle.gray)
         intelb = discord.ui.Button(label="Intel", style=discord.ButtonStyle.blurple)
         amdb = discord.ui.Button(label="AMD", style=discord.ButtonStyle.red)
+        anyb.callback = randany
         intelb.callback = randintel
         amdb.callback = randamd
+        view.add_item(anyb)
         view.add_item(intelb)
         view.add_item(amdb)
         if random.choice(["intel", "amd"]) == "intel":
