@@ -249,24 +249,6 @@ class apicmds(commands.Cog):
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="95cdkey", description="Generates a Windows 95 CD Key.")
-    @commands.cooldown(1, 3, BucketType.user)
-    async def nfcdkey(self, ctx):
-        # Get data from API
-        endpoint = "https://api.nikolan.xyz/95cdkey"
-        data = await self.fetch_data(ctx, endpoint)
-        
-        # Process data
-        if data:
-            embed = discord.Embed(title="Windows 95 CD Key", color=0x2494A1, description=f"{data['cdkey']}")
-            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/95cdkey")
-            embed.set_thumbnail(url="https://64.media.tumblr.com/f0b0786998dc2e44bfe179e9da3fa116/39dad773e2bb50bc-4c/s540x810/3534cc436c2b90f526bd483f632d0ff804a80e7b.gif")
-            await ctx.respond(embed=embed)
-        else:
-            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching key data from the API. Try again later.")
-            embed.color = discord.Colour.red()
-            await ctx.respond(embed=embed)
-
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="8ball", description="yes")
     @commands.cooldown(1, 3, BucketType.user)
     async def ebll(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
