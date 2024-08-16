@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 import aiohttp
+import requests
+import json
+import html
 import asyncio
 from discord.ext.commands import BucketType
 import random
@@ -9,6 +12,22 @@ class apicmds(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
+
+    async def genpage(self, infoy):
+        imgurl = f"https://external-content.duckduckgo.com/iu/?u={infoy['images'][0]['thumb']}"
+        embed = discord.Embed(title="FBI Wanted List", thumbnail=imgurl, description=f"**{infoy['title']}**\n{html.unescape(infoy['description'])}")
+        if infoy['age_range']:
+            embed.add_field(name="Age Range", value=infoy['age_range'])
+        if infoy['eyes_raw']:
+            embed.add_field(name="Eye Color", value=infoy['eyes_raw'])
+        if infoy['place_of_birth']:
+            embed.add_field(name="Place of Birth", value=infoy['place_of_birth'])
+        if infoy['reward_text']:
+            embed.add_field(name="Reward", value=infoy['reward_text'])
+        if infoy['languages']:
+            langs = ", ".join(infoy['languages'])
+            embed.add_field(name="Languages", value=langs)
+        return embed
 
     async def fetch_data(self, ctx, endpoint):
         try:
@@ -280,6 +299,110 @@ class apicmds(commands.Cog):
             await ctx.respond(embed=embed)
         else:
             embed = discord.Embed(title = "Error", description = f"An error occurred while fetching scrambled data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
+
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="fbiwanted", description="Shows the FBI wanted list.")
+    @commands.cooldown(1, 15, BucketType.user)
+    async def fbiwanted(self, ctx):  # type: ignore
+        def fetchpage(page_num):
+            endpoint = f"https://api.fbi.gov/wanted/v1/list?page={page_num}"
+            try:
+                response = requests.get(endpoint) # i would use aiohttp but for some reason i get 403????
+                response.raise_for_status()
+                data = response.json()
+                return data
+            except Exception as e:
+                print(e)
+                return None
+        
+        counter = 0
+        page_num = 1
+        data = fetchpage(page_num)
+        
+        if not data:
+            embed = discord.Embed(title="Error", description="An error occurred while fetching data from the API. Try again later.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
+            return
+
+        total_entries = data['total']
+        items_per_page = len(data['items'])
+
+        # discord view
+        view = discord.ui.View(timeout=None)
+
+        async def backcb(interaction):
+            await interaction.response.defer()
+            nonlocal counter
+            nonlocal page_num
+            nonlocal data
+            if counter == 0:
+                if page_num == 1:
+                    # go to last page
+                    page_num = (total_entries // items_per_page) + (1 if total_entries % items_per_page > 0 else 0)
+                    data = fetchpage(page_num)
+                    counter = len(data['items']) - 1
+                else:
+                    # go back
+                    page_num -= 1
+                    data = fetchpage(page_num)
+                    counter = len(data['items']) - 1
+
+            else:
+                counter -= 1
+
+            embed = await self.genpage(data['items'][counter])
+            embed.set_footer(text=f"{(page_num-1)*items_per_page + counter + 1}/{total_entries}")
+            msg = await interaction.original_response()
+            await msg.edit(embed=embed, view=view)
+
+        async def nextcb(interaction):
+            await interaction.response.defer()
+            nonlocal counter
+            nonlocal page_num
+            nonlocal data
+            
+            counter += 1
+
+            if counter >= len(data['items']):
+                page_num += 1
+                counter = 0
+                data = fetchpage(page_num)
+
+                if not data or not data['items']:
+                    if page_num == 1:
+                        return await interaction.respond("No more entries.", ephemeral=True)
+                    page_num = 1
+                    counter = 0
+                    data = fetchpage(page_num)
+                    if not data or not data['items']:
+                        return await interaction.respond("No more entries.", ephemeral=True)
+
+            embed = await self.genpage(data['items'][counter])
+            embed.set_footer(text=f"{(page_num-1)*len(data['items']) + counter + 1}/{total_entries}")
+            
+            msg = await interaction.original_response()
+            await msg.edit(embed=embed, view=view)
+            embed = await self.genpage(data['items'][counter])
+            embed.set_footer(text=f"{(page_num-1)*items_per_page + counter + 1}/{total_entries}")
+            
+            msg = await interaction.original_response()
+            await msg.edit(embed=embed, view=view)
+
+        backbutton = discord.ui.Button(label="Back", style=discord.ButtonStyle.blurple)
+        nextbutton = discord.ui.Button(label="Next", style=discord.ButtonStyle.blurple)
+        backbutton.callback = backcb
+        nextbutton.callback = nextcb
+        view.add_item(backbutton)
+        view.add_item(nextbutton)
+
+        try:
+            embed = await self.genpage(data['items'][counter])
+            embed.set_footer(text=f"{counter+1}/{total_entries}")
+            await ctx.respond(embed=embed, view=view)
+        except Exception as e:
+            embed = discord.Embed(title="Error", description="An error occurred while processing the data.")
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed)
 
