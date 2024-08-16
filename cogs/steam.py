@@ -30,7 +30,7 @@ class steams(commands.Cog):
                 
                 try:
                     if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
-                        return await ctx.respond("No NSFW, please.")
+                        return await ctx.respond(embed=discord.Embed(color=discord.Color.blue(), description="This game contains NSFW material, so it is not shown."))
                 except:
                     pass
                 
@@ -51,7 +51,7 @@ class steams(commands.Cog):
                         
                         try:
                             if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
-                                return await interaction.response.edit_message(content="No NSFW, please.")
+                                return await interaction.response.edit_message(embed=discord.Embed(color=discord.Color.blue(), description="This game contains NSFW material, so it is not shown."))
                         except:
                             pass
 
@@ -155,7 +155,7 @@ class steams(commands.Cog):
                         appinfo = appinfo1[str(appid)]['data']
                 try:
                     if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
-                        return await ctx.respond("No NSFW, please.")
+                        return await ctx.respond(embed=discord.Embed(color=discord.Color.blue(), description="This game contains NSFW material, so it is not shown."))
                 except:
                     pass
                 appdisc = f"**{appinfo['achievements']['total'] if 'achievements' in appinfo else "No"} achievements\nReleased {appinfo['release_date']['date']}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
