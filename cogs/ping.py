@@ -25,13 +25,15 @@ class pingcmd(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ping", description="Shows the bot latency.")
+    aboutgroup = discord.SlashCommandGroup(name="about", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
+
+    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ping", description="Shows the bot latency.")
     async def ping(self, ctx):
         embed = discord.Embed(title="Pong!", description=f"{round(self.bot.latency*1000)}ms", colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="debug_info", description="Shows info about the bot.")
+    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="host", description="Shows info about the bot.")
     @commands.cooldown(1, 15, BucketType.user)
     async def info(self, ctx):
         await ctx.respond("Fetching...")
@@ -98,17 +100,11 @@ class pingcmd(commands.Cog):
         thev.add_item(butbbb)
         await ctx.edit(embed=embed, content="", view=thev)
 
-    @commands.slash_command(name="top-gg", description="Sends a link to the bot's page in top.gg")
-    async def topgg(self, ctx):
-        embed = discord.Embed(color=0xff0000, url=f"https://top.gg/bot/{self.bot.user.id}", title="Top.gg", description="Please, upvote the bot in Top.gg!")
-        await ctx.respond(embed=embed)
-
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
+    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
-        embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command")
-        embed.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
-        embed.add_field(inline=False, name="Camputers", value="""
+        embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
+        embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images")
+        embed.add_field(inline=False, name="Computers", value="""
 Lenovo ThinkPad X13 Gen 3 AMD
 Lenovo ThinkPad L14 Gen 4 Intel
 Acer Aspire 5 (A514-54-532U)
@@ -116,9 +112,15 @@ Huawei MateBook D14
 Fujitsu Stylistic Q702
 Custom built (i3-12100/RX7600)
 Custom built (R5-3600/6500XT)
+Custom built (R9-5900X/7800XT)
 """)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
-        await ctx.respond(embed=embed)
+        view = discord.ui.View()
+        gitbuton = discord.ui.Button(label='GitHub Repo (star pls)', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
+        topbuton = discord.ui.Button(label='Top.gg (upvote pls)', style=discord.ButtonStyle.url, url=f"https://top.gg/bot/{self.bot.user.id}")
+        view.add_item(gitbuton)
+        view.add_item(topbuton)
+        await ctx.respond(embed=embed, view=view)
 
     @commands.slash_command(name="pipeyhit", description="Hits someone with metal pipey.")
     async def pipeyhit(self, ctx, victim: discord.Option(discord.User, "The user you want to hit"), pingusr: discord.Option(bool, name="ping", description="Ping the victim") = False): # type: ignore
@@ -190,45 +192,6 @@ Custom built (R5-3600/6500XT)
         except Exception as e:
             embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=str(e))
             await ctx.respond(embed=embed)
-
-    @commands.slash_command(name='about', description='Shows info about the bot.')
-    async def botinfosy(self, ctx):
-        await ctx.defer(ephemeral=False)
-        #credits embed
-        bcredits = discord.Embed(title="Credits", description=f"I'm alive thanks to those peoples ⬇️", colour=0xffffff)
-        bcredits.add_field(inline=False, name="Current version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs")
-        bcredits.add_field(inline=False, name="Old version", value="[**nikolan**](https://git.nikolan.xyz/nikolan) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Contributor, helped with a lot of stuff\n[**giga**](https://github.com/fikinoob) - Former contributor, helped clean the code up\n[**nexus**](https://github.com/lhwe) - Helped find bugs and vulnerabilities in the bot")
-        #camputers embed
-        camputers = discord.Embed(colour=0x00ff0d, title="Camputers", description="These are all the camputers the bot was developed on")
-        camputers.add_field(inline=False, name="", value="""
-Lenovo ThinkPad X13 Gen 3 AMD
-Lenovo ThinkPad L14 Gen 4 Intel
-Acer Aspire 5 (A514-54-532U)
-Huawei MateBook D14
-Fujitsu Stylistic Q702
-Custom built (i3-12100/RX7600)
-Custom built (R5-3600/6500XT)
-Custom built (R9-5900X/7800XT)
-""")
-        #history embed
-        histembed = discord.Embed(colour=0xff0000, title="Bot Development History", description="""
-**November 2023** - Initial development started using JavaScript.
-**December 2023** - Transitioned to Python, releasing the first version of the bot.
-**February 2024** - Started a private GitHub repository and invited contributors, bot added to Top.gg
-**March 2024** - Began rewriting the bot and created [Public GitHub repo](https://github.com/nikolan123/nikolans-robot-rewrite)
-**April 2024** - Rewrite live!
-""")    
-        #send mr embeds
-        embedlist = []
-        embedlist.append(bcredits)
-        embedlist.append(camputers)
-        embedlist.append(histembed)
-        view = discord.ui.View()
-        gitbuton = discord.ui.Button(label='GitHub Repo (star pls)', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
-        topbuton = discord.ui.Button(label='Top.gg (upvote pls)', style=discord.ButtonStyle.url, url=f"https://top.gg/bot/{self.bot.user.id}")
-        view.add_item(gitbuton)
-        view.add_item(topbuton)
-        await ctx.respond(embeds=embedlist, view=view)
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name='random-color', description='Generates a random color')
     async def random_color(self, ctx):

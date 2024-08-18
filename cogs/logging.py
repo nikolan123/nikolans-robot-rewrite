@@ -25,6 +25,20 @@ class rls(commands.Cog):
             rlembed.set_timestamp()
             rlhook.add_embed(rlembed)
             await rlhook.execute()
+        else:
+            if ctx.selected_options:
+                fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
+            else:
+                fancyoptions = ''
+            print(f"Error in command {ctx.command} {fancyoptions}: {error}")
+            await ctx.respond(
+                f"An unknown error occurred :c",
+                ephemeral=True)
+            rlhook = AsyncDiscordWebhook(url=self.bot.suggestionshook, username=f"{self.bot.logginghookname} - error")
+            rlembed = DiscordEmbed(title="Unknown", description=f"User {ctx.author.name} ({ctx.author.id}) got an error while trying to run {ctx.command} :(\n```{error}```", color="ff0000")
+            rlembed.set_timestamp()
+            rlhook.add_embed(rlembed)
+            await rlhook.execute()
     
     @commands.Cog.listener()
     async def on_application_command(self, ctx):

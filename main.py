@@ -94,4 +94,10 @@ for h in cogs:
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
 
-bot.run(bot.botToken)
+try:
+    bot.run(bot.botToken)
+except KeyboardInterrupt:
+    print("Exiting...")
+    exit()
+except Exception as e:
+    print(f"Error starting bot: {e}")
