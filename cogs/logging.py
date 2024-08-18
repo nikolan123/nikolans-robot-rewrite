@@ -31,11 +31,11 @@ class rls(commands.Cog):
             else:
                 fancyoptions = ''
             print(f"Error in command {ctx.command} {fancyoptions}: {error}")
-            await ctx.respond(
-                f"An unknown error occurred :c",
-                ephemeral=True)
+            embed = discord.Embed(title = "Error", description = f"An unknown error has occured. This has been reported to the developers.")
+            embed.color = discord.Colour.red()
+            await ctx.respond(embed=embed)
             rlhook = AsyncDiscordWebhook(url=self.bot.suggestionshook, username=f"{self.bot.logginghookname} - error")
-            rlembed = DiscordEmbed(title="Unknown", description=f"User {ctx.author.name} ({ctx.author.id}) got an error while trying to run {ctx.command} :(\n```{error}```", color="ff0000")
+            rlembed = DiscordEmbed(title="Unknown Error", description=f"User {ctx.author.name} ({ctx.author.id}) got an error while trying to run {ctx.command} :(\n```{error}```", color="ff0000")
             rlembed.set_timestamp()
             rlhook.add_embed(rlembed)
             await rlhook.execute()
