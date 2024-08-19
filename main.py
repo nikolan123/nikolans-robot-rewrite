@@ -64,7 +64,7 @@ async def blacklist_check(ctx):
         return False # tells command not to execute
     return True
 
-cogs = ['ping', 'minerscraft', 'jokes', 'song', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
+cogs = ['ping', 'furryhackers', 'minerscraft', 'jokes', 'song', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
     try:
         bot.load_extension(f"cogs.{h}")

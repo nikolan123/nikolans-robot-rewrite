@@ -105,6 +105,14 @@ class pingcmd(commands.Cog):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
         embed.add_field(inline=False, name="", value="[**expect**](https://whatdidyouexpect.xyz) - added a few commands\n[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images")
         embed.add_field(inline=False, name="Computers", value="""
+Lenovo ThinkPad X13 Gen 3 AMD
+Lenovo ThinkPad L14 Gen 4 Intel
+Acer Aspire 5 (A514-54-532U)
+Huawei MateBook D14
+Fujitsu Stylistic Q702
+Custom built (i3-12100/RX7600)
+Custom built (R5-3600/6500XT)
+Custom built (R9-5900X/7800XT)
 Lenovo ThinkPad W530 dGPU
 Macbook Air M2
 iMac Mid 2006
