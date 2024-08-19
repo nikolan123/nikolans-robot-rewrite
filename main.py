@@ -36,7 +36,6 @@ try:
     bot.logginghook = hooks_dict['logging-hook']
     bot.logginghookname = hooks_dict['logging-hook-name']
     bot.suggestionshook = hooks_dict['suggestions-hook']
-    
     bot.botToken = str(options_dict['bot-token'])
     bot.dbgAccess = options_dict['dbg-access'].split(",")
     bot.supportserver = options_dict['support-server']
@@ -49,7 +48,6 @@ except Exception as error:
 
 # code for the blacklist check
 blacklisted = []
-
 def reloadbl(): # function to refresh the blacklisted user list
     global blacklisted
     with open("data/blusers", 'r') as blfiles:
@@ -66,14 +64,13 @@ async def blacklist_check(ctx):
         return False # tells command not to execute
     return True
 
-cogs = ['ping', 'jokes', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
+cogs = ['ping', 'jokes', 'song', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam', 'winkeys', 'help', 'suggestions']
 for h in cogs:
     try:
         bot.load_extension(f"cogs.{h}")
         print(f"Loaded extension {h}")
     except Exception as e:
         print(f"Failed to load extension {h}: {e}")
-
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
