@@ -44,12 +44,12 @@ class pingcmd(commands.Cog):
         embed.add_field(inline=False, name="Debug Information", value=f"**Latency** - `{round(self.bot.latency*1000)}ms`\n**Local IP** - `{local_ip}`\n**Hostname** - `{hostname}`\n**System** - `{platform.system()} {platform.release()} - ({os.name})`\n**Python version** - `{pycpuinf['python_version']}`")
         embed.add_field(inline=False, name="Hardware", value=f"**CPU** - `{pycpuinf['brand_raw']}`")
         embed.set_footer(text=f"Requested by {ctx.author.name}")
-        async def neofetch(interaction):
-            #find / -name neofetch 2> /dev/null
+        async def funnyfetch(interaction):
+            #find / -name funnyfetch 2> /dev/null
             if os.name == 'nt':
                 return await interaction.respond("Running under Windows host :(")
-            p = remove_escape_sequences(subprocess.check_output(['neofetch', '--off']).decode("utf-8"))
-            embed = discord.Embed(title='neofetch', description=f"```{p}```")
+            p = remove_escape_sequences(subprocess.check_output(['funnyfetch', '--off']).decode("utf-8"))
+            embed = discord.Embed(title='funnyfetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
         async def pinglc(interaction):
             #find / -name ping 2> /dev/null
@@ -72,11 +72,11 @@ class pingcmd(commands.Cog):
 
         async def pinglcn(interaction):
             #find / -name ping 2> /dev/null
-            await interaction.respond('Pinging `api.nikolan.xyz`...')
+            await interaction.respond('Pinging `api.whatdidyouexpect.eu`...')
             if os.name == 'nt':
-                pingcmd = 'ping api.nikolan.xyz'
+                pingcmd = 'ping api.whatdidyouexpect.eu'
             else:
-                pingcmd = 'ping api.nikolan.xyz -c 4'
+                pingcmd = 'ping api.whatdidyouexpect.eu -c 4'
             proc = await asyncio.create_subprocess_shell(
                 pingcmd,
                 stderr=asyncio.subprocess.PIPE,
@@ -89,13 +89,13 @@ class pingcmd(commands.Cog):
             else:
                 await interaction.respond("An error occured.")
         thev = discord.ui.View()
-        butb = Button(label="Neofetch", style=discord.ButtonStyle.blurple)
-        butb.callback = neofetch
+        butb = Button(label="Funnyfetch", style=discord.ButtonStyle.blurple)
+        butb.callback = funnyfetch
         thev.add_item(butb)
         butbb = Button(label="Ping localhost", style=discord.ButtonStyle.blurple)
         butbb.callback = pinglc
         thev.add_item(butbb)
-        butbbb = Button(label="Ping api.nikolan.xyz", style=discord.ButtonStyle.blurple)
+        butbbb = Button(label="Ping api.whatdidyouexpect.eu", style=discord.ButtonStyle.blurple)
         butbbb.callback = pinglcn
         thev.add_item(butbbb)
         await ctx.edit(embed=embed, content="", view=thev)
@@ -103,16 +103,13 @@ class pingcmd(commands.Cog):
     @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images")
+        embed.add_field(inline=False, name="", value="[**expect**](https://whatdidyouexpect.xyz) - added a few commands\n[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images")
         embed.add_field(inline=False, name="Computers", value="""
-Lenovo ThinkPad X13 Gen 3 AMD
-Lenovo ThinkPad L14 Gen 4 Intel
-Acer Aspire 5 (A514-54-532U)
-Huawei MateBook D14
-Fujitsu Stylistic Q702
-Custom built (i3-12100/RX7600)
-Custom built (R5-3600/6500XT)
-Custom built (R9-5900X/7800XT)
+Lenovo ThinkPad W530 dGPU
+Macbook Air M2
+iMac Mid 2006
+iMac Mid 2011
+Gigabyte G5 KC
 """)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         view = discord.ui.View()
