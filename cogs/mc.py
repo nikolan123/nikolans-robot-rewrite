@@ -63,6 +63,15 @@ class MinecraftCommands(commands.Cog):
     @commands.cooldown(1, 5, BucketType.user)
     async def minecraft_skinn(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
         playername = urllib.parse.quote(player, safe='')
+        playername = urllib.parse.quote(player)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.mojang.com/users/profiles/minecraft/{playername}") as response:
+                try:
+                    thing = await response.json()
+                    response.raise_for_status()
+                except:
+                    return await ctx.respond(embed=discord.Embed(color=discord.Color.red(), title="Error", description="Player not found."))
+        embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png", description=str(thing['id']))
         embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png")
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(label="Download", url=f"https://mineskin.eu/download/{playername}", style=discord.ButtonStyle.url))
