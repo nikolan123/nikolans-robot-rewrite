@@ -103,7 +103,7 @@ class pingcmd(commands.Cog):
     @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
         embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.xyz) - Added a few commands")
+        embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.eu) - Added a few commands")
         embed.add_field(inline=False, name="Computers", value="""
 Lenovo ThinkPad X13 Gen 3 AMD
 Lenovo ThinkPad L14 Gen 4 Intel
