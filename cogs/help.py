@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ui import Button, View
 import csv
+
 async def autocompletehelp(ctx):
     with open('data/help.csv', 'r') as thefile:
         reader = csv.DictReader(thefile)
@@ -10,6 +11,7 @@ async def autocompletehelp(ctx):
             if ctx.options['command'].lower() in row['command'].lower():
                 misterarray.append(row['command'])
         return misterarray
+    
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
