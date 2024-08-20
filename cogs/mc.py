@@ -59,7 +59,7 @@ class MinecraftCommands(commands.Cog):
 
     @mcgroup.command(name="skin", description="Fetches a player's skin.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     async def minecraft_skinn(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
-        playername = urllib.parse.quote(player)
+        playername = urllib.parse.quote(player, safe='')
         embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png")
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(label="Download", url=f"https://mineskin.eu/download/{playername}", style=discord.ButtonStyle.url))
