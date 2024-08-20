@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import BucketType
 import aiohttp
 import urllib.parse
 
@@ -11,6 +12,7 @@ class MinecraftCommands(commands.Cog):
 
     # made by your dearest gabe/expect :3
     @mcgroup.command(name="version", description="Fetches the 'latest' Minecraft version and its download link.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @commands.cooldown(1, 5, BucketType.user)
     async def minecraft_version(self, ctx, version: discord.Option(str, "The Minecraft version to search for", required=False)): # type: ignore
         version_manifest_url = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
 
@@ -58,9 +60,17 @@ class MinecraftCommands(commands.Cog):
             await ctx.respond(f"An error occurred: {e}")
 
     @mcgroup.command(name="skin", description="Fetches a player's skin.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @commands.cooldown(1, 5, BucketType.user)
     async def minecraft_skinn(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
         playername = urllib.parse.quote(player)
-        embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.mojang.com/users/profiles/minecraft/{playername}") as response:
+                try:
+                    thing = await response.json()
+                    response.raise_for_status()
+                except:
+                    return await ctx.respond(embed=discord.Embed(color=discord.Color.red(), title="Error", description="Player not found."))
+        embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png", description=str(thing['id']))
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(label="Download", url=f"https://mineskin.eu/download/{playername}", style=discord.ButtonStyle.url))
         view.add_item(discord.ui.Button(label="Head", url=f"https://mineskin.eu/helm/{playername}", style=discord.ButtonStyle.url))
