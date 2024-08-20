@@ -34,7 +34,7 @@ class steams(commands.Cog):
                 except:
                     pass
                 
-                appdisc = f"**{appinfo['achievements']['total'] if 'achievements' in appinfo else 'No'} achievements\nReleased {appinfo['release_date']['date']}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
+                appdisc = f"**{appinfo.get('achievements', {}).get('total', 'No')} achievements\nReleased {appinfo.get('release_date', {}).get('date', 'unknown')}\n{'Free' if appinfo.get('is_free') else appinfo.get('price_overview', {}).get('final_formatted', 'unknown')}**"
                 embed = discord.Embed(title=f"{appinfo['name']}", description=html.unescape(appinfo['short_description']), url=f"https://store.steampowered.com/app/{appid}/", image=f"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header.jpg", colour=0x00b0f4)
                 embed.add_field(name="", value=appdisc)
                 
