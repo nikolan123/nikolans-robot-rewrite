@@ -72,7 +72,6 @@ class MinecraftCommands(commands.Cog):
                 except:
                     return await ctx.respond(embed=discord.Embed(color=discord.Color.red(), title="Error", description="Player not found."))
         embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png", description=str(thing['id']))
-        embed = discord.Embed(title=f"{playername}'s skin", color=discord.Color.blue(), image=f"https://mineskin.eu/armor/body/{playername}/100.png")
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(label="Download", url=f"https://mineskin.eu/download/{playername}", style=discord.ButtonStyle.url))
         view.add_item(discord.ui.Button(label="Head", url=f"https://mineskin.eu/helm/{playername}", style=discord.ButtonStyle.url))
