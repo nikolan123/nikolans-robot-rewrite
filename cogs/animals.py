@@ -56,8 +56,9 @@ class animalz(commands.Cog):
             urls = json.loads(await carlist.read())
         cat_titles = ["meowww :3", "mreowwww :33", "mrrrp :3", "meow :3", "nyaa~ :3", "nyaa~", ":3", "rawr :3"]
         meow = random.choice(urls)
+        meow = urllib.parse.urlunsplit(urllib.parse.urlsplit(meow)._replace(path=urllib.parse.quote(urllib.parse.urlsplit(meow).path), query=urllib.parse.quote(urllib.parse.urlsplit(meow).query, safe="=&")))
         embed = discord.Embed(title=random.choice(cat_titles), color=discord.Color.blue())
-        embed.set_image(url=urllib.parse.quote(meow))
+        embed.set_image(url=meow)
         await ctx.respond(embed=embed)
 
 
