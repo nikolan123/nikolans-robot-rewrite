@@ -38,11 +38,12 @@ class gimsacmd(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="gimsa", description="Searches Bing for images.")
     async def sgimsa(self, ctx, query: discord.Option(str, description="The thing to search for", name="prompt")): # type: ignore
+        await ctx.defer()
         imgurldirty = bing_image_urls(query, limit=20)
         ctx.imgurl = [url for url in imgurldirty if "reddit.com" not in url and "preview" not in url and (url.endswith('.png') or url.endswith('.jpg') or url.endswith('.jpeg'))]
         ctx.lengthy = len(ctx.imgurl)
-        #await ctx.respond(f"Left {ctx.lengthy} out of 20 images")
-        #sleep(3)
+        if ctx.imgurl == []:
+            return await ctx.respond(embed=discord.Embed(color=discord.Color.red(), description="The API returned an empty list."))
         embed = discord.Embed(title=f"Image 1/{ctx.lengthy}", image=ctx.imgurl[0].replace(' ', '%20'), colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed, view=gimsathing(ctx))
