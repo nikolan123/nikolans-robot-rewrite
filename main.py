@@ -42,6 +42,8 @@ try:
     bot.supportserver = options_dict['support-server']
     bot.ownername = options_dict['owner-name']
     bot.steamkey = options_dict['steam-key']
+    bot.spotify_id = options_dict['spotify-id']
+    bot.spotify_secret = options_dict['spotify-secret']
 except Exception as error:
     print("[INIT] Bad value in config file! Exiting.")
     print(error)

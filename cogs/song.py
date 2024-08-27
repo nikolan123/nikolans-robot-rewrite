@@ -4,54 +4,101 @@ from discord.ext.commands import BucketType
 import aiohttp
 import base64
 import io
+import json
 
 class MusicCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(name="song", description="Fetches information about a specific song.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
+    @commands.slash_command(name="song", description="Searches for a song on Spotify", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     @commands.cooldown(1, 3, BucketType.user)
-    async def song(self, ctx, artist_name: discord.Option(str, "The artist's name"), song_name: discord.Option(str, "The song name")): # type: ignore
-
-        song_url = "https://api.whatdidyouexpect.eu/song"
-
+    async def song(self, ctx, song_name: discord.Option(str, "The name of the song you want to look for")): # type: ignore
+        #### get access token ####
+        client_credentials = f"{self.bot.spotify_id}:{self.bot.spotify_secret}"
+        encoded_credentials = base64.b64encode(client_credentials.encode()).decode()
+        headers = {
+            "Authorization": f"Basic {encoded_credentials}",
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+        data = {
+            "grant_type": "client_credentials"
+        }
         async with aiohttp.ClientSession() as session:
-            async with session.get(song_url, params={"artist_name": artist_name, "song_name": song_name}) as response:
-                data = await response.json()
-                if data.get('error'):
-                    return await ctx.respond(embed=discord.Embed(color=discord.Color.red(), title="Error", description=data['error']))
+            async with session.post("https://accounts.spotify.com/api/token", headers=headers, data=data) as response:
                 response.raise_for_status()
-           
-        if not all(key in data for key in ("album_name", "album_url", "artist_name", "preview_audio_base64", "track_name", "album_image_url")):
-            await ctx.respond("Incomplete data received from the API.")
-            return
+                response_json = await response.json()
+                accesstoken = response_json.get("access_token")
+        ##########################
+        async def gen_page(jsons, counter, total):
+            embed = discord.Embed(color=discord.Color.blue(), title=jsons['name'], description=f"{'Explicit\n' if jsons['explicit'] is True else ''}")
+            thumbnailurl = jsons.get('album', {}).get('images', [{}])[0].get('url', None)
+            embed.set_thumbnail(url=thumbnailurl)
+            artistfield = ''
+            for artist in jsons['artists']:
+                artistfield += f"[{artist['name']}]({artist['external_urls']['spotify']})\n"
+            embed.add_field(name="Artists", value=artistfield)
+            embed.set_footer(text=f"{counter+1}/{total}")
+            return embed
+        async def gen_view(jsons):
+            view = discord.ui.View(timeout=None)
+            view.add_item(discord.ui.Button(label="Spotify", url=jsons['external_urls']['spotify'], style=discord.ButtonStyle.url))
+            if jsons['preview_url']:
+                view.add_item(discord.ui.Button(label="Preview", url=jsons['preview_url'], style=discord.ButtonStyle.url))
+            return view
+        async def nextcb(interaction):
+            nonlocal total
+            nonlocal ctx
+            nonlocal counter
+            nonlocal allsongs
+            await interaction.response.defer()
+            counter += 1
+            if counter == total:
+                counter = 0
+            embed = await gen_page(allsongs[counter], counter, total)
+            view = await gen_view(allsongs[counter])
+            await ctx.edit(embed=embed, view=view)
+        async def backcb(interaction):
+            nonlocal total
+            nonlocal ctx
+            nonlocal counter
+            nonlocal allsongs
+            await interaction.response.defer()
+            counter -= 1
+            if counter == -1:
+                counter = total-1
+            embed = await gen_page(allsongs[counter], counter, total)
+            view = await gen_view(allsongs[counter])
+            await ctx.edit(embed=embed, view=view)
+        endpoint = "https://api.spotify.com/v1/search"
+        headers = {
+            "Authorization": f"Bearer {accesstoken}"
+        }
+        params = {
+            "q": song_name,
+            "type": "track",
+            "limit": 25
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(endpoint, headers=headers, params=params) as response:
+                response.raise_for_status()
+                responsejson = await response.json()
+                #print(responsejson)
+        allsongs = responsejson['tracks']['items']
 
-        album_name = data.get("album_name")
-        album_url = data.get("album_url")
-        artist_name = data.get("artist_name")
-        track_name = data.get("track_name")
-        bpreview_audio_base64 = base64.b64decode(data.get("preview_audio_base64"))
-        track_url = data.get("track_url")
-        album_image_url = data.get("album_image_url")
+        total = responsejson['tracks']['limit']
+        counter = 0
 
-        mp3t = io.BytesIO(bpreview_audio_base64)
-    
-        embed = discord.Embed(title=track_name, colour=0x00b0f4)
-        embed.add_field(name="Album", value=album_name, inline=False)
-        embed.add_field(name="Artist", value=artist_name, inline=False)
+        control_view = discord.ui.View(timeout=None)
 
-        if album_image_url:
-            embed.set_thumbnail(url=album_image_url)
+        backbutton = discord.ui.Button(label="Back", style=discord.ButtonStyle.blurple)
+        nextbutton = discord.ui.Button(label="Next", style=discord.ButtonStyle.blurple)
+        backbutton.callback = backcb
+        nextbutton.callback = nextcb
+        control_view.add_item(backbutton)
+        control_view.add_item(nextbutton)
 
-        view = discord.ui.View(timeout=None)
-        view.add_item(discord.ui.Button(label="Album link", url=album_url, style=discord.ButtonStyle.url))
-        if track_url is None:
-            view.add_item(discord.ui.Button(label="Preview", url=track_url, style=discord.ButtonStyle.url))
-
-        try:
-            await ctx.respond(embed=embed, view=view, file=discord.File(fp=mp3t, filename="preview.mp3"))
-        except discord.HTTPException as e:
-            await ctx.respond(f"An error occurred: {e}")
+        await ctx.respond(embed=await gen_page(responsejson['tracks']['items'][0], counter, total), view=await gen_view(responsejson['tracks']['items'][0]))
+        await ctx.respond(view=control_view, ephemeral=True)
 
 def setup(bot):
     bot.add_cog(MusicCommands(bot))
