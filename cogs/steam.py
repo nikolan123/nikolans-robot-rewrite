@@ -47,6 +47,8 @@ class steams(commands.Cog):
                         async with aiohttp.ClientSession() as session:
                             async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
                                 appinfo1 = await response.json()
+                                if appinfo1[str(appid)]['success'] == False:
+                                    return await random_game_callback(interaction)
                                 appinfo = appinfo1[str(appid)]['data']
                         
                         try:
@@ -152,6 +154,10 @@ class steams(commands.Cog):
                 async with aiohttp.ClientSession() as session:
                     async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
                         appinfo1 = await response.json()
+                        if appinfo1[str(appid)]['success'] == False:
+                            embed = discord.Embed(color=discord.Color.blue(), title=game['name'])
+                            embed.set_footer(text="More info could not be fetched, likely because the game doesn't have a store page.")
+                            return await ctx.respond(embed=embed)
                         appinfo = appinfo1[str(appid)]['data']
                 try:
                     if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
