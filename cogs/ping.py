@@ -102,35 +102,33 @@ class pingcmd(commands.Cog):
 
     @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
     async def credyts(self, ctx):
-        embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
-        embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.eu) - Added a few commands")
-        embed.add_field(inline=False, name="Links", value=f"[Github Repo (star pls :3)](https://github.com/nikolan123/nikolans-robot-rewrite)\n[Top.gg (upvote pls)](https://top.gg/bot/{self.bot.user.id})")
-        embed.set_footer(text=f"Requested by {ctx.author.name}")
-        async def first_page(interaction):
-            await interaction.response.defer()
-            msg = await interaction.original_response()
+        async def embedy():
             embed = discord.Embed(title="Credits", description=f"I'm alive thanks to those people ⬇️", colour=0x00b0f4)
             embed.add_field(inline=False, name="", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.eu) - Added a few commands")
             embed.add_field(inline=False, name="Links", value=f"[Github Repo (star pls :3)](https://github.com/nikolan123/nikolans-robot-rewrite)\n[Top.gg (upvote pls)](https://top.gg/bot/{self.bot.user.id})")
-            embed.set_footer(text=f"Requested by {interaction.user.name}")
+            embed.set_footer(text=f"Requested by {ctx.author.name}")
+            return embed
+        async def first_page(interaction):
+            await interaction.response.defer()
+            msg = await interaction.original_response()
             view = discord.ui.View()
             first_page_button = Button(label='People', style=discord.ButtonStyle.blurple)
             first_page_button.disabled = True
             view.add_item(first_page_button)
-            camputers_button = Button(label="Camputers", style=discord.ButtonStyle.blurple)
+            camputers_button = Button(label="Computers", style=discord.ButtonStyle.blurple)
             camputers_button.callback = camputers_page
             view.add_item(camputers_button)
-            await msg.edit(embed=embed, view=view)
+            await msg.edit(embed=await embedy(), view=view)
 
         async def camputers_page(interaction):
             await interaction.response.defer()
             msg = await interaction.original_response()
-            embed = discord.Embed(title='Camputers', description="Lenovo ThinkPad X13 Gen 3 AMD\nLenovo ThinkPad L14 Gen 4 Intel\nAcer Aspire 5 (A514-54-532U)\nHuawei MateBook D14\nFujitsu Stylistic Q702\nCustom built (i3-12100/RX7600)\nCustom built (R5-3600/6500XT)\nCustom built (R9-5900X/7800XT)\nLenovo ThinkPad W530 dGPU\nGigabyte G5 KC", color=0x54db8d)
+            embed = discord.Embed(title='Computers', description="Lenovo ThinkPad X13 Gen 3 AMD\nLenovo ThinkPad L14 Gen 4 Intel\nAcer Aspire 5 (A514-54-532U)\nHuawei MateBook D14\nFujitsu Stylistic Q702\nCustom built (i3-12100/RX7600)\nCustom built (R5-3600/6500XT)\nCustom built (R9-5900X/7800XT)\nLenovo ThinkPad W530 dGPU\nGigabyte G5 KC", color=0x54db8d)
             embed.set_footer(text=f"Requested by {interaction.user.name}")
             view = discord.ui.View()
             people_button = Button(label="People", style=discord.ButtonStyle.blurple)
             people_button.callback = first_page
-            camputers_button_disabled = Button(label="Camputers", style=discord.ButtonStyle.blurple)
+            camputers_button_disabled = Button(label="Computers", style=discord.ButtonStyle.blurple)
             camputers_button_disabled.disabled = True
             view.add_item(people_button)
             view.add_item(camputers_button_disabled)
@@ -140,10 +138,10 @@ class pingcmd(commands.Cog):
         first_page_button = Button(label='People', style=discord.ButtonStyle.blurple)
         first_page_button.disabled = True
         view.add_item(first_page_button)
-        camputers_button = Button(label="Camputers", style=discord.ButtonStyle.blurple)
+        camputers_button = Button(label="Computers", style=discord.ButtonStyle.blurple)
         camputers_button.callback = camputers_page
         view.add_item(camputers_button)
-        await ctx.respond(embed=embed, view=view)
+        await ctx.respond(embed=await embedy(), view=view)
 
     @commands.slash_command(name="pipeyhit", description="Hits someone with metal pipey.")
     async def pipeyhit(self, ctx, victim: discord.Option(discord.User, "The user you want to hit"), pingusr: discord.Option(bool, name="ping", description="Ping the victim") = False): # type: ignore
