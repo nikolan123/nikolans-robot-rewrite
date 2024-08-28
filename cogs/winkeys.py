@@ -21,7 +21,9 @@ class winkeyss(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="winkey", description="Returns a Generic Windows Key.")
+    keygroup = discord.SlashCommandGroup(name="key", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
+
+    @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows", description="Returns a Generic Windows Key.")
     async def winkeycmd(self, ctx, the: discord.Option(str, name="version", description="The Windows version to get a key for", autocomplete=getoss)): # type: ignore
         async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
             reader = csv.reader(await csvfile.readlines())
@@ -36,7 +38,7 @@ class winkeyss(commands.Cog):
         embed.color = discord.Colour.red()
         await ctx.respond(embed=embed, ephemeral=True)
                     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="95cdkey", description="Generates a Windows 95 CD Key.")
+    @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows95cd", description="Generates a Windows 95 CD Key.")
     async def nfcdkey(self, ctx):
         #gen site num
         forbidden_site_numbers = [333, 444, 555, 666, 777, 888, 999]
@@ -64,7 +66,7 @@ class winkeyss(commands.Cog):
                         return await ctx.respond(embed=embed)
         return await ctx.respond(discord.Embed(color=discord.Color.red(), title="Error", description="Error validating key, please try again"))
     
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="95oemkey", description="Generates a Windows 95 OEM Key.")
+    @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows95oem", description="Generates a Windows 95 OEM Key.")
     async def nfoemkey(self, ctx):
         #gen first segment
         day_of_year = random.randint(1, 366)
@@ -90,7 +92,7 @@ class winkeyss(commands.Cog):
         embed.set_thumbnail(url="https://64.media.tumblr.com/f0b0786998dc2e44bfe179e9da3fa116/39dad773e2bb50bc-4c/s540x810/3534cc436c2b90f526bd483f632d0ff804a80e7b.gif")
         return await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="office97key", description="Generates an Office 97 Key.")
+    @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="office97", description="Generates an Office 97 Key.")
     async def o97key(self, ctx):
         #gen 1st segment
         digit3 = random.randint(0, 9)
