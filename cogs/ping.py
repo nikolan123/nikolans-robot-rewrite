@@ -170,31 +170,6 @@ Gigabyte G5 KC
         embed.set_thumbnail(url="https://cdn-icons-png.flaticon.com/512/1247/1247769.png")
         await ctx.respond(embed=embed)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="calc", description="Maths")
-    async def calcuyy(self, ctx, thingy: discord.Option(str, "...", name="expression")): # type: ignore
-        try:
-            if not all(char.isdigit() or char in "+-*/.()" for char in thingy):
-                raise ValueError("Invalid input! Please provide a valid mathematical expression.")
-
-            expr = sp.sympify(thingy)
-            
-            if isinstance(expr, int):
-                fresulty = str(expr)
-            else:
-                fresulty = str(expr).rstrip('0').rstrip('.')
-
-            embed = discord.Embed(colour=0x00b0f4, title="Math Solver", description=f"{thingy} = **{fresulty}**")
-            await ctx.respond(embed=embed)
-        except ValueError as e:
-            embed = discord.Embed(colour=0xff0000, title='Error! Invalid input', description=str(e))
-            await ctx.respond(embed=embed)
-        except sp.SympifyError as e:
-            embed = discord.Embed(colour=0xff0000, title='Error! Invalid input', description=str(e))
-            await ctx.respond(embed=embed)
-        except Exception as e:
-            embed = discord.Embed(colour=0xff0000, title="Unexpected error!", description=str(e))
-            await ctx.respond(embed=embed)
-
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name='random-color', description='Generates a random color')
     async def random_color(self, ctx):
         red = random.randint(0, 255)
