@@ -32,8 +32,8 @@ Once you have have installed the required Python modules, generated your token, 
 
 ## Credits
 - [**nikolan**](https://nikolan.net) - Main bot developer
-- [**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command
 - [**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs
+- [**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command and more
 - [**mat**](https://github.com/mat-1) - Sand cat images
 - [**expect**](https://whatdidyouexpect.eu) - Added a few commands
 
