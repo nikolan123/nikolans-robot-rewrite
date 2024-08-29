@@ -28,7 +28,7 @@ class ai(commands.Cog):
             aresponse = await g4f.ChatCompletion.create_async(
                 model=g4f.models.default,
                 messages=[{"role": "user", "content": prompt}],
-                provider=g4f.Provider.You,
+                provider=g4f.Provider.Blackbox
             )
         except Exception as e:
             print(e)
