@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import aiohttp
-import requests
 import json
 import html
 import asyncio
@@ -305,20 +304,24 @@ class apicmds(commands.Cog):
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="fbiwanted", description="Shows the FBI wanted list.")
     @commands.cooldown(1, 15, BucketType.user)
     async def fbiwanted(self, ctx):  # type: ignore
-        def fetchpage(page_num):
+        async def fetchpage(page_num):
             endpoint = f"https://api.fbi.gov/wanted/v1/list?page={page_num}"
             try:
-                response = requests.get(endpoint) # i would use aiohttp but for some reason i get 403????
-                response.raise_for_status()
-                data = response.json()
-                return data
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0"
+                }
+                async with aiohttp.ClientSession(headers=headers) as session:
+                    async with session.get(endpoint) as response:
+                        response.raise_for_status()  
+                        data = await response.json()
+                        return data
             except Exception as e:
                 print(e)
                 return None
         
         counter = 0
         page_num = 1
-        data = fetchpage(page_num)
+        data = await fetchpage(page_num)
         
         if not data:
             embed = discord.Embed(title="Error", description="An error occurred while fetching data from the API. Try again later.")
@@ -341,12 +344,12 @@ class apicmds(commands.Cog):
                 if page_num == 1:
                     # go to last page
                     page_num = (total_entries // items_per_page) + (1 if total_entries % items_per_page > 0 else 0)
-                    data = fetchpage(page_num)
+                    data = await fetchpage(page_num)
                     counter = len(data['items']) - 1
                 else:
                     # go back
                     page_num -= 1
-                    data = fetchpage(page_num)
+                    data = await fetchpage(page_num)
                     counter = len(data['items']) - 1
 
             else:
@@ -368,14 +371,14 @@ class apicmds(commands.Cog):
             if counter >= len(data['items']):
                 page_num += 1
                 counter = 0
-                data = fetchpage(page_num)
+                data = await fetchpage(page_num)
 
                 if not data or not data['items']:
                     if page_num == 1:
                         return await interaction.respond("No more entries.", ephemeral=True)
                     page_num = 1
                     counter = 0
-                    data = fetchpage(page_num)
+                    data = await fetchpage(page_num)
                     if not data or not data['items']:
                         return await interaction.respond("No more entries.", ephemeral=True)
 

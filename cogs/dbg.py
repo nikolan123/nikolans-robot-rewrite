@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
-import requests
+import aiohttp
 
-def check_website_status(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raises an HTTPError for bad responses (4xx and 5xx status codes)
-        return f"The website <{url}> is up. Status code: {response.status_code}"
-    except requests.exceptions.RequestException as e:
-        return f"The website <{url}> is down. Error: {e}"
+async def check_website_status(url):
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url) as response:
+                response.raise_for_status()  # Raises an HTTPError for bad responses (4xx and 5xx status codes)
+                return f"The website <{url}> is up. Status code: {response.status}"
+        except aiohttp.ClientError as e:
+            return f"The website <{url}> is down. Error: {e}"
 
 class dadbg(commands.Cog):
     def __init__(self, bot):
@@ -27,7 +28,7 @@ class dadbg(commands.Cog):
                         pass
                     else:
                         web = "http://" + web
-                    result = check_website_status(web)
+                    result = await check_website_status(web)
                     await ctx.respond(result)
                 else:
                     await ctx.respond("Please specify a website/IP to ping")
