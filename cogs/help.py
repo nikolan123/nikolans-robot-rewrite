@@ -67,12 +67,12 @@ class Help(commands.Cog):
                 for f in commandspages[indexy]:
                     embed.add_field(name=f['command'], value=f['description'], inline=False)
                 thev = discord.ui.View()
-                but = Button(label="Increase", style=discord.ButtonStyle.green)
+                but = Button(label="Next", style=discord.ButtonStyle.green)
                 but.callback = callbacktesty
-                butb = Button(label="Decrease", style=discord.ButtonStyle.green)
+                butb = Button(label="Back", style=discord.ButtonStyle.green)
                 butb.callback = callbacktestyb
-                thev.add_item(but)
                 thev.add_item(butb)
+                thev.add_item(but)
                 await ctx.respond(embed=embed,view=thev)
             except Exception as e:
                 embed = discord.Embed(title = "Error", description = f"Command broke!\n\n{e}")
