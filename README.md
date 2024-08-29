@@ -1,6 +1,5 @@
 # nikolan's robot rewrite
-My Discord bot :3 it sucks
-
+Steam API, Spotify API, FBI wanted list, sand cats, Windows product keys, animals, random CPUs and GPUs, Bing image search, AI, 8ball, Minecraft skin and version lookup and more!
 
 ## Setup
 If you would like to self host the bot, you can do so with the following steps:
