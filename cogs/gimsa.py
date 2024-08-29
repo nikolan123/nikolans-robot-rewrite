@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from bing_image_urls import bing_image_urls
-from time import sleep
 
 class gimsathing(discord.ui.View):
     def __init__(self, ctx, *args, **kwargs):

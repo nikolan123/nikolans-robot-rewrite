@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-from discord.ext.commands import BucketType
-from discord.ui import View
 import random
 
 class misccmds(commands.Cog):

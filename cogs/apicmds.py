@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import aiohttp
-import json
 import html
 import asyncio
 from discord.ext.commands import BucketType

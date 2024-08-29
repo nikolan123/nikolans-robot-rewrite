@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ui import Button, View
+from discord.ui import Button
 import csv
 
 async def autocompletehelp(ctx):

@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType
-from discord.ui import Button, View
+from discord.ui import Button
 import socket
 import os
 import platform
