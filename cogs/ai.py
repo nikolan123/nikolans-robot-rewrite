@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import BucketType
 from discord.ui import View
-import requests
+import aiohttp
 import g4f
 from time import sleep
 
@@ -42,17 +42,15 @@ class ai(commands.Cog):
         #check if discord can send, otherwise upload to upaste.de
         if len(aresponse) > 1957:
             url = "https://upaste.de/"
-            payload = f'-----011000010111000001101001\r\nContent-Disposition: form-data; name="text"\r\n\r\{aresponse}\r\n-----011000010111000001101001--\r\n'
-            headers = {
-                "content-type": "multipart/form-data; boundary=---011000010111000001101001"
-            }
-            response = requests.post(url, data=payload, headers=headers)
-            
-            ufembed = discord.Embed(title="Response Uploaded", description="The AI's response was over 2000 characters, so it was uploaded to a [third-party website](https://upaste.de).", colour=0x00B0F4)
-            ufembed.set_footer(text=f"Requested by {ctx.author.name}")
-            
-            view = View()
-            view.add_item(discord.ui.Button(label = "View Response", url = response.url, style = discord.ButtonStyle.url))
+            form_data = aiohttp.FormData()
+            form_data.add_field('text', aresponse)
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, data=form_data) as response:
+                    ufembed = discord.Embed(title="Response Uploaded", description="The AI's response was over 2000 characters, so it was uploaded to a [third-party website](https://upaste.de).", colour=0x00B0F4)
+                    ufembed.set_footer(text=f"Requested by {ctx.author.name}")
+                
+                    view = View()
+                    view.add_item(discord.ui.Button(label = "View Response", url = str(response.url), style = discord.ButtonStyle.url))
 
             await ctx.edit(embed=ufembed, view = view)
             return
