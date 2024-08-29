@@ -38,4 +38,4 @@ Once you have have installed the required Python modules, generated your token, 
 - [**expect**](https://whatdidyouexpect.eu) - Added a few commands
 
 
-# This project is licensed under [GPLv3](/LICENSE)
+# This project is licensed under [AGPLv3](/LICENSE)
