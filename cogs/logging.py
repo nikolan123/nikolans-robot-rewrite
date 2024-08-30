@@ -36,7 +36,7 @@ class BotLogging(commands.Cog):
             else:
                 fancyoptions = ''
             print(f"Error in command {ctx.command} {fancyoptions}: {error}")
-            embed = discord.Embed(title = "Error", description = f"An unknown error has occured. This has been reported to the developers.", ephemeral=True)
+            embed = discord.Embed(title = "Error", description = f"An unknown error has occured. This has been reported to the developers.")
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed, ephemeral=True)
             rlhook = AsyncDiscordWebhook(url=self.bot.suggestionshook, username=f"{self.bot.logginghookname} - error")
