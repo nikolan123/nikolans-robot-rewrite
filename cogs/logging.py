@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord_webhook import DiscordEmbed, AsyncDiscordWebhook, DiscordWebhook
 
-class rls(commands.Cog):
+class BotLogging(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -64,4 +64,4 @@ class rls(commands.Cog):
         await rlhook.execute()
 
 def setup(bot):
-    bot.add_cog(rls(bot))
+    bot.add_cog(BotLogging(bot))

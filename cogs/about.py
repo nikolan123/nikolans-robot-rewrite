@@ -18,7 +18,7 @@ def remove_escape_sequences(text):
         cleaned_lines.append(cleaned_line)
     return '\n'.join(cleaned_lines)
 
-class pingcmd(commands.Cog):
+class AboutCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -174,4 +174,4 @@ class pingcmd(commands.Cog):
         await ctx.respond(embed=embed, view=view)
 
 def setup(bot):
-    bot.add_cog(pingcmd(bot))
+    bot.add_cog(AboutCommands(bot))

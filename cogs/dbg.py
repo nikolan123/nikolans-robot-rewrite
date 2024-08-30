@@ -11,7 +11,7 @@ async def check_website_status(url):
         except aiohttp.ClientError as e:
             return f"The website <{url}> is down. Error: {e}"
 
-class dadbg(commands.Cog):
+class DebugCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -95,4 +95,4 @@ class dadbg(commands.Cog):
             await ctx.respond(embed=embed, ephemeral=True)
 
 def setup(bot):
-    bot.add_cog(dadbg(bot))
+    bot.add_cog(DebugCommands(bot))
