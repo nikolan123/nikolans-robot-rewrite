@@ -57,15 +57,41 @@ class apicmds(commands.Cog):
         if data:
             cpu_info = data.get("cpu")
             if cpu_info:
-                ghzs = f"**Base Frequency** {cpu_info['Base Freq.(GHz)']}GHz" if cpu_info['Max. Turbo Freq.(GHz)'] == "N/A" else f"**Base/Max Frequency** {cpu_info['Base Freq.(GHz)']}/{cpu_info['Max. Turbo Freq.(GHz)']}GHz"
-                embed = discord.Embed(title=f"Intel {cpu_info['Product']}", color=0x2494A1, description=f"**Cores/Threads** {cpu_info['Cores']}c{cpu_info['Threads']}t\n**Release Date** {cpu_info['Release Date']}\n**TDP** {cpu_info['TDP(W)']}W\n**Lithography** {cpu_info['Lithography(nm)']}nm\n{ghzs}")
+                product = cpu_info.get('Product', 'Unknown') or 'Unknown'
+                base_freq = cpu_info.get('Base Freq.(GHz)', '').replace('GHz', '')
+                max_turbo_freq = cpu_info.get('Max. Turbo Freq.(GHz)', '').replace('GHz', '')
+                cores = cpu_info.get('Cores', 'Unknown') or 'Unknown'
+                threads = cpu_info.get('Threads', 'Unknown') or 'Unknown'
+                release_date = cpu_info.get('Release Date', 'Unknown') or 'Unknown'
+                tdp = cpu_info.get('TDP(W)', 'Unknown') or 'Unknown'
+                lithography = cpu_info.get('Lithography(nm)', 'Unknown') or 'Unknown'
+                
+                base_freq = base_freq if base_freq and base_freq != "N/A" else "Unknown"
+                max_turbo_freq = max_turbo_freq if max_turbo_freq and max_turbo_freq != "N/A" else "Unknown"
+                cores = cores if cores and cores != "N/A" else "Unknown"
+                threads = threads if threads and threads != "N/A" else "Unknown"
+                release_date = release_date if release_date and release_date != "N/A" else "Unknown"
+                tdp = tdp if tdp and tdp != "N/A" else "Unknown"
+                lithography = lithography if lithography and lithography != "N/A" else "Unknown"
+
+                if max_turbo_freq == "Unknown":
+                    ghzs = f"**Base Frequency** {base_freq}GHz"
+                else:
+                    ghzs = f"**Base/Max Frequency** {base_freq}/{max_turbo_freq}GHz"
+
+                embed = discord.Embed(
+                    title=f"Intel {product}",
+                    color=0x2494A1,
+                    description=f"""**Cores/Threads** {cores}c{threads}t
+            **Release Date** {release_date}
+            **TDP** {tdp}W
+            **Lithography** {lithography}nm
+            {ghzs}"""
+                )
                 embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.xyz/intel-cpu")
+
                 return embed
-            else:
-                embed = discord.Embed(title = "Error", description = f"An error occurred while fetching CPU data from the API. Try again later.")
-                embed.color = discord.Colour.red()
-                return embed
-        
+     
     async def amdcpu(self, ctxauthor):
         # Get data from API
         endpoint = "https://api.nikolan.xyz/amd-cpu"
@@ -89,29 +115,31 @@ class apicmds(commands.Cog):
                 return embed
         
         # Process data
-        if cpu_info:
-            stupid = "\u00c2\u00b9 \u00c2\u00b2"
-            cpumodel = cpu_info['Model']
-            clockbase = cpu_info['Base Clock'].replace('GHz', '')
-            clockmax = cpu_info[f'Max. Boost Clock {stupid}'].replace("GHz", "").replace("Up to ", "")
-            rdate = cpu_info['Launch Date']
-            if rdate == "":
-                rdate = "Unknown"
-            if not "AMD" in str(cpumodel):
-                cpumodel = f"AMD {cpumodel}"
-            tdp = cpu_info['Default TDP']
-            if tdp == "":
-                tdp = "Unknown"
-            cpumodel = cpumodel.replace("â„¢", "")
-            embed = discord.Embed(
-                title=f"{cpumodel}",
-                color=0xff0000,
-                description=f"""**Cores/Threads** {cpu_info['# of CPU Cores']}c{cpu_info['# of Threads']}t
-            **Release Date** {rdate}
-            **TDP** {tdp}
-            **Lithography** {cpu_info['Processor Technology for CPU Cores']}
-            **Base/Max Frequency** {clockbase}/{clockmax}GHz""")
+        if cpu_info:      
+            cpumodel = cpu_info.get('Model', 'Unknown') or 'Unknown'
+            clockbase = cpu_info.get('Base Clock', '').replace('GHz', '') or 'Unknown'
+            clockmax = cpu_info.get(f'Max. Boost Clock', '').replace("GHz", "").replace("Up to ", "") or 'Unknown'
+            rdate = cpu_info.get('Launch Date', 'Unknown') or 'Unknown'
+            tdp = cpu_info.get('Default TDP', 'Unknown') or 'Unknown'
+            lithography = cpu_info.get('Processor Technology for CPU Cores', 'Unknown') or 'Unknown'
+            cores = cpu_info.get('# of CPU Cores', '0') or '0'
+            threads = cpu_info.get('# of Threads', '0') or '0'
 
+            # Format CPU model if it doesn't already contain "AMD"
+            if "AMD" not in str(cpumodel):
+                cpumodel = f"AMD {cpumodel}"
+
+            cpumodel = cpumodel.replace("â„¢", "")
+
+            embed = discord.Embed(
+                title=cpumodel,
+                color=0xff0000,
+                description=f"""**Cores/Threads** {cores}c/{threads}t
+**Release Date** {rdate}
+**TDP** {tdp}
+**Lithography** {lithography}
+**Base/Max Frequency** {clockbase}/{clockmax}GHz"""
+            )
             embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.xyz/amd-cpu")
             return embed
         else:
@@ -124,18 +152,25 @@ class apicmds(commands.Cog):
     async def random_cpu(self, ctx):
         await ctx.defer(ephemeral=False)
         view = discord.ui.View(timeout=None)
+
         async def randany(interaction):
+            nonlocal view
             if random.choice(["intel", "amd"]) == "intel":
                 the = await self.intelcpu(interaction.user.name)
             else:
                 the = await self.amdcpu(interaction.user.name)
             await interaction.respond(embed=the, view=view)
+
         async def randintel(interaction):
+            nonlocal view
             the = await self.intelcpu(interaction.user.name)
             await interaction.respond(embed=the, view=view)
+
         async def randamd(interaction):
+            nonlocal view
             the = await self.amdcpu(interaction.user.name)
             await interaction.respond(embed=the, view=view)
+
         anyb = discord.ui.Button(label="Any", style=discord.ButtonStyle.gray)
         intelb = discord.ui.Button(label="Intel", style=discord.ButtonStyle.blurple)
         amdb = discord.ui.Button(label="AMD", style=discord.ButtonStyle.red)
@@ -145,6 +180,7 @@ class apicmds(commands.Cog):
         view.add_item(anyb)
         view.add_item(intelb)
         view.add_item(amdb)
+
         if random.choice(["intel", "amd"]) == "intel":
             the = await self.intelcpu(ctx.author.name)
             return await ctx.respond(embed=the, view=view)
@@ -152,30 +188,18 @@ class apicmds(commands.Cog):
             the = await self.amdcpu(ctx.author.name)
             return await ctx.respond(embed=the, view=view)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="random-gpu", description="Sends a random Nvidia or AMD GPU.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="gpu", description="Sends a random Nvidia or AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
     async def random_gpu(self, ctx):
         await ctx.defer(ephemeral=False)
+        view = discord.ui.View(timeout=None)
 
-        if random.choice(["nvidia", "amd"]) == "nvidia":
-            # Get data from API
-            endpoint = "https://api.nikolan.xyz/nvidia-gpu"
-            data = await self.fetch_data(ctx, endpoint)
-            
-            # Process data
-            if data:
-                gpuname = data["gpu"]
-                if not "nvidia" in gpuname.lower():
-                    gpuname = f"Nvidia {gpuname}"
-                embed = discord.Embed(title=gpuname, color=0x00ff00)
-                embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/nvidia-gpu")
-                await ctx.respond(embed=embed)
-            else:
-                embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
-                embed.color = discord.Colour.red()
-                await ctx.respond(embed=embed)
-        else:
-            # Get data from API
+        async def amdgpu(interaction):
+            nonlocal view
+            try:
+                await interaction.response.defer()
+            except discord.errors.InteractionResponded:
+                pass
             endpoint = "https://api.nikolan.xyz/amd-gpu"
             cpu_info = await self.fetch_data(ctx, endpoint)
             
@@ -194,62 +218,58 @@ class apicmds(commands.Cog):
                 **VRAM**: Up to {maxvram} {ramtype}
                 **TBP** {tdp}
                 """)
-                embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-gpu")
-                await ctx.respond(embed=embed)
+                try:
+                    authorname = interaction.author.name
+                except:
+                    authorname = interaction.user.name
+                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.xyz/amd-gpu")
+                await interaction.respond(embed=embed, view=view)
+
+        async def nvidiagpu(interaction):
+            nonlocal view
+            try:
+                await interaction.response.defer()
+            except discord.errors.InteractionResponded:
+                pass
+            endpoint = "https://api.nikolan.xyz/nvidia-gpu"
+            data = await self.fetch_data(ctx, endpoint)
+            
+            # Process data
+            if data:
+                gpuname = data["gpu"]
+                if not "nvidia" in gpuname.lower():
+                    gpuname = f"Nvidia {gpuname}"
+                embed = discord.Embed(title=gpuname, color=0x00ff00)
+                try:
+                    authorname = interaction.author.name
+                except:
+                    authorname = interaction.user.name
+                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.xyz/nvidia-gpu")
+                await ctx.respond(embed=embed, view=view)
             else:
                 embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
                 embed.color = discord.Colour.red()
-                await ctx.respond(embed=embed)
-    
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="amd-gpu", description="Sends a random AMD GPU.")
-    @commands.cooldown(1, 3, BucketType.user)
-    async def random_amd_gpu(self, ctx):
-        # Get data from API
-        endpoint = "https://api.nikolan.xyz/amd-gpu"
-        cpu_info = await self.fetch_data(ctx, endpoint)
+                await interaction.respond(embed=embed, view=view)
         
-        # Process data
-        if cpu_info:
-            cpumodel = cpu_info['Model']
-            rdate = cpu_info['Launch Date']
-            tdp = cpu_info['Typical Board Power (Desktop)']
-            maxvram = cpu_info['Max Memory Size']
-            ramtype = cpu_info['Memory Type']
-            embed = discord.Embed(
-                title=f"{cpumodel}",
-                color=0xff0000,
-                description=f"""
-            **Release Date** {rdate}
-            **VRAM**: Up to {maxvram} {ramtype}
-            **TBP** {tdp}
-            """)
-            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/amd-gpu")
-            await ctx.respond(embed=embed)
-        else:
-            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
-            embed.color = discord.Colour.red()
-            await ctx.respond(embed=embed)
+        async def anygpu(interaction):
+            if random.choice(["amd", "nvidia"]) == "amd":
+                await amdgpu(interaction)
+            else:
+                await nvidiagpu(interaction)
 
-    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="nvidia-gpu", description="Sends a random Nvidia GPU.")
-    @commands.cooldown(1, 3, BucketType.user)
-    async def random_nvidia_gpu(self, ctx):
-        # Get data from API
-        endpoint = "https://api.nikolan.xyz/nvidia-gpu"
-        data = await self.fetch_data(ctx, endpoint)
-        
-        # Process data
-        if data:
-            gpuname = data["gpu"]
-            if not "nvidia" in gpuname.lower():
-                gpuname = f"Nvidia {gpuname}"
-            embed = discord.Embed(title=gpuname, color=0x00ff00)
-            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/nvidia-gpu")
-            await ctx.respond(embed=embed)
-        else:
-            embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
-            embed.color = discord.Colour.red()
-            await ctx.respond(embed=embed)
+        anyb = discord.ui.Button(label="Any", style=discord.ButtonStyle.gray)
+        amdb = discord.ui.Button(label="AMD", style=discord.ButtonStyle.red)
+        nvidiab = discord.ui.Button(label="Nvidia", style=discord.ButtonStyle.green)
+        anyb.callback = anygpu
+        amdb.callback = amdgpu
+        nvidiab.callback = nvidiagpu
 
+        view.add_item(anyb)
+        view.add_item(amdb)
+        view.add_item(nvidiab)
+
+        await anygpu(ctx)
+            
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="8ball", description="yes")
     @commands.cooldown(1, 3, BucketType.user)
     async def eightball(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
