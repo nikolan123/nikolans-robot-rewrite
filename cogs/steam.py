@@ -125,7 +125,7 @@ class steams(commands.Cog):
                 message = await ctx.respond(embed=embed)
 
                 # buttonsy add
-                view = MyView(current_page, len(chunks), thesearch, chunks)
+                view = SteamSearchView(current_page, len(chunks), thesearch, chunks)
                 await message.edit(view=view)
 
         except Exception as e:
@@ -209,7 +209,7 @@ class steams(commands.Cog):
         embed.set_footer(text=userinfo['steamid'])
         await ctx.respond(embed=embed)
 
-class MyView(discord.ui.View):
+class SteamSearchView(discord.ui.View):
     def __init__(self, current_page, total_pages, thesearch, chunks):
         super().__init__()
         self.current_page = current_page
