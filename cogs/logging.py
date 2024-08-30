@@ -25,9 +25,14 @@ class rls(commands.Cog):
             rlembed.set_timestamp()
             rlhook.add_embed(rlembed)
             await rlhook.execute()
+        elif isinstance(error, discord.errors.CheckFailure): # if user is blacklisted
+            return
         else:
             if ctx.selected_options:
-                fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
+                try:
+                    fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
+                except KeyError:
+                    fancyoptions = ''
             else:
                 fancyoptions = ''
             print(f"Error in command {ctx.command} {fancyoptions}: {error}")
@@ -43,7 +48,10 @@ class rls(commands.Cog):
     @commands.Cog.listener()
     async def on_application_command(self, ctx):
         if ctx.selected_options:
-            fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
+            try:
+                fancyoptions = ', '.join(f"{option['name']}: {option['value']}" for option in ctx.selected_options)
+            except KeyError:
+                fancyoptions = ''
         else:
             fancyoptions = ''
         rlhook = AsyncDiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - commands")
