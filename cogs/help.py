@@ -66,7 +66,7 @@ class Help(commands.Cog):
                     await interaction.response.edit_message(embed=embed)
                 for f in commandspages[indexy]:
                     embed.add_field(name=f['command'], value=f['description'], inline=False)
-                thev = discord.ui.View()
+                thev = discord.ui.View(timeout=None)
                 but = Button(label="Next", style=discord.ButtonStyle.green)
                 but.callback = callbacktesty
                 butb = Button(label="Back", style=discord.ButtonStyle.green)

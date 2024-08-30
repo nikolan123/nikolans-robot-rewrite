@@ -127,7 +127,7 @@ class pingcmd(commands.Cog):
             embed.set_footer(text=f"Requested by {interaction.user.name}")
             await msg.edit(embed=embed, view=view)
 
-        view = discord.ui.View()
+        view = discord.ui.View(timeout=None)
         first_page_button = Button(label='People', style=discord.ButtonStyle.blurple)
         first_page_button.callback = first_page
         view.add_item(first_page_button)
@@ -152,7 +152,7 @@ class pingcmd(commands.Cog):
 
         async def contributing_callback(interaction):
             await interaction.response.defer()
-            view = discord.ui.View()
+            view = discord.ui.View(timeout=None)
             gitbuton = discord.ui.Button(label='GitHub Repo', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
             view.add_item(gitbuton)
             embed = discord.Embed(color=discord.Color.dark_teal(), title="Contributing", description="Anyone is able to contribute to the bot, as it is fully open-source.")

@@ -49,7 +49,7 @@ class ai(commands.Cog):
                     ufembed = discord.Embed(title="Response Uploaded", description="The AI's response was over 2000 characters, so it was uploaded to a [third-party website](https://upaste.de).", colour=0x00B0F4)
                     ufembed.set_footer(text=f"Requested by {ctx.author.name}")
                 
-                    view = View()
+                    view = View(timeout=None)
                     view.add_item(discord.ui.Button(label = "View Response", url = str(response.url), style = discord.ButtonStyle.url))
 
             await ctx.edit(embed=ufembed, view = view)
