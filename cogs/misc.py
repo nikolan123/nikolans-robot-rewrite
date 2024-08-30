@@ -39,7 +39,7 @@ class misccmds(commands.Cog):
         await ctx.respond(embed=embed)
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="avatar", description="Gets a user's avatar")
-    async def avatary(self, ctx, usery: discord.Option(discord.Member, name="user", description="The user to get the avatar of")): # type: ignore
+    async def avatar_command(self, ctx, usery: discord.Option(discord.Member, name="user", description="The user to get the avatar of")): # type: ignore
         embed = discord.Embed(title=f"{usery.name}'s Avatar", url=usery.avatar.url, image=usery.avatar.url, colour=0x00b0f4)
         embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.respond(embed=embed)

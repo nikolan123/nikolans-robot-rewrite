@@ -17,7 +17,7 @@ class Help(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="help", description="Shows the bot's commands.")
-    async def hefflp(self, ctx, commandsys: discord.Option(str, name="command", autocomplete=autocompletehelp, description="(optional) The command to get help for") = None): # type: ignore
+    async def help_command(self, ctx, commandsys: discord.Option(str, name="command", autocomplete=autocompletehelp, description="(optional) The command to get help for") = None): # type: ignore
         if commandsys == None:
             try:
                 await ctx.defer(ephemeral=False)

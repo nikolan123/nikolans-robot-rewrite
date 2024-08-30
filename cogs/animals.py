@@ -16,7 +16,7 @@ class animalz(commands.Cog):
 
     @animalgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="doggo", description="Sends a random dog picture.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def doggocmd(self, ctx):
+    async def doggo_command(self, ctx):
         endpoint = "https://dog.ceo/api/breeds/image/random"
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as response:
@@ -34,7 +34,7 @@ class animalz(commands.Cog):
     
     @animalgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="dogfact", description="Sends a random dog fact.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def dogfactc(self, ctx):
+    async def dogfact_command(self, ctx):
         endpoint = "https://dogapi.dog/api/v2/facts"
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as response:

@@ -14,7 +14,7 @@ class steams(commands.Cog):
     steamgroup = discord.SlashCommandGroup(name="steam", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
-    async def randst(self, ctx):
+    async def random_steam_game(self, ctx):
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
@@ -88,7 +88,7 @@ class steams(commands.Cog):
             await ctx.respond(embed=embed)
 
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="search", description="Searches for games on Steam.")
-    async def stsrg(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
+    async def steam_search(self, ctx, thesearch: discord.Option(str, name='query', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
@@ -135,7 +135,7 @@ class steams(commands.Cog):
             await ctx.respond(embed=embed)
     
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="game", description="Searches for a game on Steam.")
-    async def stsr(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
+    async def steam_game_lookup(self, ctx, thesearch: discord.Option(str, name='name', description='The game you want to look for')): # type: ignore
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
@@ -180,7 +180,7 @@ class steams(commands.Cog):
             await ctx.respond(embed=embed)
 
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="user", description="Searches for users on Steam.")
-    async def steamlookup(self, ctx, user: discord.Option(str, name='id', description='The Steam ID you want to lookup')): # type: ignore
+    async def steam_user_lookup(self, ctx, user: discord.Option(str, name='id', description='The Steam ID you want to lookup')): # type: ignore
         pattern = r'^\d{17}$'
         if not re.match(pattern, user):
             return await ctx.respond("Please, input a valid Steam ID.")

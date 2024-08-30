@@ -24,7 +24,7 @@ class winkeyss(commands.Cog):
     keygroup = discord.SlashCommandGroup(name="key", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
     @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows", description="Returns a Generic Windows Key.")
-    async def winkeycmd(self, ctx, the: discord.Option(str, name="version", description="The Windows version to get a key for", autocomplete=getoss)): # type: ignore
+    async def windows_key_command(self, ctx, the: discord.Option(str, name="version", description="The Windows version to get a key for", autocomplete=getoss)): # type: ignore
         async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
             reader = csv.reader(await csvfile.readlines())
             for row in reader:
@@ -39,7 +39,7 @@ class winkeyss(commands.Cog):
         await ctx.respond(embed=embed, ephemeral=True)
                     
     @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows95cd", description="Generates a Windows 95 CD Key.")
-    async def nfcdkey(self, ctx):
+    async def win95cd_command(self, ctx):
         #gen site num
         forbidden_site_numbers = [333, 444, 555, 666, 777, 888, 999]
         site_number = str(random.choice([x for x in range(999) if x not in forbidden_site_numbers])).zfill(3)
@@ -67,7 +67,7 @@ class winkeyss(commands.Cog):
         return await ctx.respond(discord.Embed(color=discord.Color.red(), title="Error", description="Error validating key, please try again"))
     
     @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="windows95oem", description="Generates a Windows 95 OEM Key.")
-    async def nfoemkey(self, ctx):
+    async def win95oem_command(self, ctx):
         #gen first segment
         day_of_year = random.randint(1, 366)
         year_suffix = random.randint(95, 103)
@@ -93,7 +93,7 @@ class winkeyss(commands.Cog):
         return await ctx.respond(embed=embed)
 
     @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="office97", description="Generates an Office 97 Key.")
-    async def o97key(self, ctx):
+    async def office97_command(self, ctx):
         #gen 1st segment
         digit3 = random.randint(0, 9)
         digit4 = (digit3 + random.choice([1, 2])) % 10

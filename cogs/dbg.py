@@ -18,7 +18,7 @@ class dadbg(commands.Cog):
         self.dbgAccess = bot.dbgAccess
         
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="dbg", description="Debug console for the bot, ignore unless you are a developer.")
-    async def dbgcmdy(self, ctx, commandy: discord.Option(str, name="command", description="The command you want to run"), arg1: discord.Option(str, name="arg", description="The argument for the command") = None): # type: ignore
+    async def dbg_command(self, ctx, commandy: discord.Option(str, name="command", description="The command you want to run"), arg1: discord.Option(str, name="arg", description="The argument for the command") = None): # type: ignore
         if str(ctx.author.id) in self.dbgAccess:
             #ping command
             if commandy == "ping":

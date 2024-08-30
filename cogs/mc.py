@@ -60,7 +60,7 @@ class MinecraftCommands(commands.Cog):
 
     @mcgroup.command(name="skin", description="Fetches a player's skin.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     @commands.cooldown(1, 5, BucketType.user)
-    async def minecraft_skinn(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
+    async def minecraft_skin(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
         playername = urllib.parse.quote(player, safe='')
         playername = urllib.parse.quote(player)
         async with aiohttp.ClientSession() as session:

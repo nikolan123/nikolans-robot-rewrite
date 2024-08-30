@@ -36,7 +36,7 @@ class gimsacmd(commands.Cog):
         self._last_member = None
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="gimsa", description="Searches Bing for images.")
-    async def sgimsa(self, ctx, query: discord.Option(str, description="The thing to search for", name="prompt")): # type: ignore
+    async def gimsa_command(self, ctx, query: discord.Option(str, description="The thing to search for", name="prompt")): # type: ignore
         await ctx.defer()
         imgurldirty = bing_image_urls(query, limit=20)
         ctx.imgurl = [url for url in imgurldirty if "reddit.com" not in url and "preview" not in url and (url.endswith('.png') or url.endswith('.jpg') or url.endswith('.jpeg'))]

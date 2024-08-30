@@ -219,7 +219,7 @@ class apicmds(commands.Cog):
     
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="amd-gpu", description="Sends a random AMD GPU.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def gpumyy(self, ctx):
+    async def random_amd_gpu(self, ctx):
         # Get data from API
         endpoint = "https://api.nikolan.xyz/amd-gpu"
         cpu_info = await self.fetch_data(ctx, endpoint)
@@ -248,7 +248,7 @@ class apicmds(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="nvidia-gpu", description="Sends a random Nvidia GPU.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def nvgpu(self, ctx):
+    async def random_nvidia_gpu(self, ctx):
         # Get data from API
         endpoint = "https://api.nikolan.xyz/nvidia-gpu"
         data = await self.fetch_data(ctx, endpoint)
@@ -268,7 +268,7 @@ class apicmds(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="8ball", description="yes")
     @commands.cooldown(1, 3, BucketType.user)
-    async def ebll(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
+    async def eightball(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
         # Get data from API
         endpoint = f"https://api.nikolan.xyz/8ball?question={texty}"
         data = await self.fetch_data(ctx, endpoint)
@@ -285,7 +285,7 @@ class apicmds(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="scramble", description="Scrambles text.")
     @commands.cooldown(1, 3, BucketType.user)
-    async def scrmbol(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
+    async def scramble_command(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
         # Get data from API
         endpoint = f"https://api.nikolan.xyz/scramble?text={texty}"
         data = await self.fetch_data(ctx, endpoint)

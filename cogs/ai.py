@@ -13,7 +13,7 @@ class ai(commands.Cog):
 
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ai", description="Generates text using AI.")
     @commands.cooldown(1, 6, BucketType.user)
-    async def aicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="Your prompt for the AI.")): # type: ignore
+    async def ai_command(self, ctx, prompt: discord.Option(str, name="prompt", description="Your prompt for the AI.")): # type: ignore
         #send loading embed
         embed = discord.Embed(title="Generating, please wait...", colour=0x00B0F4)
         embed.set_thumbnail(
@@ -61,7 +61,7 @@ class ai(commands.Cog):
 
     # @commands.slash_command(name="local_ai", description="Generates text using AI")
     # @commands.cooldown(1, 6, BucketType.user)
-    # async def localaicmdy(self, ctx, prompt: discord.Option(str, name="prompt", description="The prompt for the ai")): # type: ignore
+    # async def local_ai_command(self, ctx, prompt: discord.Option(str, name="prompt", description="The prompt for the ai")): # type: ignore
     #     #send loading embed
     #     embed = discord.Embed(title="Generating, please wait...", colour=0x00B0F4)
     #     embed.set_thumbnail(
