@@ -10,7 +10,6 @@ class MinecraftCommands(commands.Cog):
 
     mcgroup = discord.SlashCommandGroup(name="minecraft", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
-    # made by your dearest gabe/expect :3
     @mcgroup.command(name="version", description="Fetches the 'latest' Minecraft version and its download link.", integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install})
     @commands.cooldown(1, 5, BucketType.user)
     async def minecraft_version(self, ctx, version: discord.Option(str, "The Minecraft version to search for", required=False)): # type: ignore
