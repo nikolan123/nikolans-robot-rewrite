@@ -11,22 +11,6 @@ class apicmds(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    async def genpage(self, infoy):
-        imgurl = f"https://external-content.duckduckgo.com/iu/?u={infoy['images'][0]['thumb']}"
-        embed = discord.Embed(title="FBI Wanted List", thumbnail=imgurl, description=f"**{infoy['title']}**\n{html.unescape(infoy['description'])}")
-        if infoy['age_range']:
-            embed.add_field(name="Age Range", value=infoy['age_range'])
-        if infoy['eyes_raw']:
-            embed.add_field(name="Eye Color", value=infoy['eyes_raw'])
-        if infoy['place_of_birth']:
-            embed.add_field(name="Place of Birth", value=infoy['place_of_birth'])
-        if infoy['reward_text']:
-            embed.add_field(name="Reward", value=infoy['reward_text'])
-        if infoy['languages']:
-            langs = ", ".join(infoy['languages'])
-            embed.add_field(name="Languages", value=langs)
-        return embed
-
     async def fetch_data(self, ctx, endpoint):
         try:
             async with aiohttp.ClientSession() as session:
@@ -303,6 +287,21 @@ class apicmds(commands.Cog):
     @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="fbiwanted", description="Shows the FBI wanted list.")
     @commands.cooldown(1, 15, BucketType.user)
     async def fbiwanted(self, ctx):  # type: ignore
+        async def genpage(infoy):
+            imgurl = f"https://external-content.duckduckgo.com/iu/?u={infoy['images'][0]['thumb']}"
+            embed = discord.Embed(title="FBI Wanted List", thumbnail=imgurl, description=f"**{infoy['title']}**\n{html.unescape(infoy['description'])}")
+            if infoy['age_range']:
+                embed.add_field(name="Age Range", value=infoy['age_range'])
+            if infoy['eyes_raw']:
+                embed.add_field(name="Eye Color", value=infoy['eyes_raw'])
+            if infoy['place_of_birth']:
+                embed.add_field(name="Place of Birth", value=infoy['place_of_birth'])
+            if infoy['reward_text']:
+                embed.add_field(name="Reward", value=infoy['reward_text'])
+            if infoy['languages']:
+                langs = ", ".join(infoy['languages'])
+                embed.add_field(name="Languages", value=langs)
+            return embed
         async def fetchpage(page_num):
             endpoint = f"https://api.fbi.gov/wanted/v1/list?page={page_num}"
             try:
@@ -354,7 +353,7 @@ class apicmds(commands.Cog):
             else:
                 counter -= 1
 
-            embed = await self.genpage(data['items'][counter])
+            embed = await genpage(data['items'][counter])
             embed.set_footer(text=f"{(page_num-1)*items_per_page + counter + 1}/{total_entries}")
             msg = await interaction.original_response()
             await msg.edit(embed=embed, view=view)
@@ -381,12 +380,12 @@ class apicmds(commands.Cog):
                     if not data or not data['items']:
                         return await interaction.respond("No more entries.", ephemeral=True)
 
-            embed = await self.genpage(data['items'][counter])
+            embed = await genpage(data['items'][counter])
             embed.set_footer(text=f"{(page_num-1)*len(data['items']) + counter + 1}/{total_entries}")
             
             msg = await interaction.original_response()
             await msg.edit(embed=embed, view=view)
-            embed = await self.genpage(data['items'][counter])
+            embed = await genpage(data['items'][counter])
             embed.set_footer(text=f"{(page_num-1)*items_per_page + counter + 1}/{total_entries}")
             
             msg = await interaction.original_response()
@@ -400,7 +399,7 @@ class apicmds(commands.Cog):
         view.add_item(nextbutton)
 
         try:
-            embed = await self.genpage(data['items'][counter])
+            embed = await genpage(data['items'][counter])
             embed.set_footer(text=f"{counter+1}/{total_entries}")
             await ctx.respond(embed=embed, view=view)
         except Exception as e:
