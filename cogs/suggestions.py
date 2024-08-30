@@ -20,6 +20,7 @@ class suggestions(commands.Cog):
         embed = discord.Embed(title = "Thank you!", description = f"We have recieved your suggestion.")
         embed.color = discord.Colour.green()
         await ctx.respond(embed=embed, ephemeral=True)
+        
     @contactgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="bugreport", description="Report a bug to the bot's developers.")
     async def bugreport(self, ctx, the: discord.Option(str, name="bug", description="Describe the bug you found")): # type: ignore
         rlhook = DiscordWebhook(url=self.bot.suggestionshook, username=f"{self.bot.logginghookname} - bug report")
