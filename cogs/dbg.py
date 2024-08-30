@@ -49,7 +49,6 @@ class dadbg(commands.Cog):
                             blfile.write(f"{arg1}\n")
                         await ctx.respond(f"Blacklisted {arg1}")
                     self.bot.reloadbl()
-                    await ctx.respond(result)
                 else:
                     await ctx.respond("Please specify a user to blacklist")
             elif commandy == "unblacklist":
