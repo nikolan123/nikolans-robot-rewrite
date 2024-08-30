@@ -62,7 +62,6 @@ class MinecraftCommands(commands.Cog):
     @commands.cooldown(1, 5, BucketType.user)
     async def minecraft_skin(self, ctx, player: discord.Option(str, "...", required=True)): # type: ignore
         playername = urllib.parse.quote(player, safe='')
-        playername = urllib.parse.quote(player)
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://api.mojang.com/users/profiles/minecraft/{playername}") as response:
                 try:
