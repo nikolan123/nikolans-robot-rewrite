@@ -25,15 +25,9 @@ class pingcmd(commands.Cog):
 
     aboutgroup = discord.SlashCommandGroup(name="about", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
-    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ping", description="Shows the bot latency.")
-    async def ping(self, ctx):
-        embed = discord.Embed(title="Pong!", description=f"{round(self.bot.latency*1000)}ms", colour=0x00b0f4)
-        embed.set_footer(text=f"Requested by {ctx.author.name}")
-        await ctx.respond(embed=embed)
-
-    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="host", description="Shows info about the bot.")
+    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="host", description="Shows info about the bot's host.")
     @commands.cooldown(1, 15, BucketType.user)
-    async def info(self, ctx):
+    async def host_info(self, ctx):
         await ctx.respond("Fetching...")
         pycpuinf = cpuinfo.get_cpu_info()
         hostname = socket.gethostname()
@@ -86,7 +80,7 @@ class pingcmd(commands.Cog):
                 await interaction.respond(embed=embed)
             else:
                 await interaction.respond("An error occured.")
-        thev = discord.ui.View()
+        thev = discord.ui.View(timeout=None)
         butb = Button(label="Neofetch", style=discord.ButtonStyle.blurple)
         butb.callback = neofetch
         thev.add_item(butb)
@@ -99,7 +93,7 @@ class pingcmd(commands.Cog):
         await ctx.edit(embed=embed, content="", view=thev)
 
     @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="credits", description="Shows the credits.")
-    async def credyts(self, ctx):
+    async def bot_credits(self, ctx):
         # first page
         embed1 = discord.Embed(title="Credits", colour=0x00b0f4)
         embed1.add_field(inline=False, name="People", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command and more\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.eu) - Added a few commands")
@@ -145,6 +139,38 @@ class pingcmd(commands.Cog):
 
         embed = embed1
         embed.set_footer(text=f"Requested by {ctx.author.name}")
+        await ctx.respond(embed=embed, view=view)
+
+    @aboutgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="bot", description="Shows info about the bot.")
+    async def bot_info(self, ctx):
+        async def credits_callback(interaction):
+            nonlocal ctx
+            await interaction.response.defer()
+            ctx2 = ctx
+            ctx2.author = interaction.user
+            await self.bot_credits(ctx2)
+
+        async def contributing_callback(interaction):
+            await interaction.response.defer()
+            view = discord.ui.View()
+            gitbuton = discord.ui.Button(label='GitHub Repo', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
+            view.add_item(gitbuton)
+            embed = discord.Embed(color=discord.Color.dark_teal(), title="Contributing", description="Anyone is able to contribute to the bot, as it is fully open-source.")
+            embed.add_field(name="How to Start",value="1. Fork the repository on GitHub.\n""2. Clone your fork to your local machine.\n""3. Create a new branch for your feature or bug fix.",inline=False)
+            embed.add_field(name="Reporting Issues",value=f"If you find a bug or have a suggestion, please open an issue on our GitHub repository. For security issues, do not file a public issue, instead send {self.bot.ownername} a direct message.",inline=False)
+            embed.add_field(name="Pull Requests", value="Please ensure your code is well-documented and includes tests where appropriate. Submit a pull request when ready.", inline=False)
+            embed.set_footer(text="Thank you for your contributions!")
+            await interaction.respond(embed=embed, view=view)
+            
+        embed = discord.Embed(title="nikolan's robot", description="A multifunctional Discord bot.\nLicensed under AGPLv3\n[⭐ Star the GitHub repository!](https://github.com/nikolan123/nikolans-robot-rewrite)", thumbnail=str(self.bot.user.avatar.url), color=discord.Color.dark_gold())
+        embed.set_footer(text="mreeow :3")
+        view = discord.ui.View(timeout=None)
+        button_credits = Button(label="Credits", style=discord.ButtonStyle.blurple)
+        button_credits.callback = credits_callback
+        view.add_item(button_credits)
+        button_contributing = Button(label="Contributing", style=discord.ButtonStyle.blurple)
+        button_contributing.callback = contributing_callback
+        view.add_item(button_contributing)
         await ctx.respond(embed=embed, view=view)
 
 def setup(bot):
