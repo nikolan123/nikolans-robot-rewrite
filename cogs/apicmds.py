@@ -214,10 +214,10 @@ class apicmds(commands.Cog):
                     title=f"{cpumodel}",
                     color=0xff0000,
                     description=f"""
-                **Release Date** {rdate}
-                **VRAM**: Up to {maxvram} {ramtype}
-                **TBP** {tdp}
-                """)
+**Release Date** {rdate}
+**VRAM**: Up to {maxvram} {ramtype}
+**TBP** {tdp}
+""")
                 try:
                     authorname = interaction.author.name
                 except:
