@@ -50,6 +50,7 @@ class AboutCommands(commands.Cog):
                 except Exception:
                     output = None
                 if output:
+                    output = output.replace('``', '`​`​') # zwsp backticks
                     return await interaction.respond(f"```{output}```")
                 else:
                     return await interaction.respond("An error occurred :(")
