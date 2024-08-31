@@ -39,7 +39,20 @@ class AboutCommands(commands.Cog):
         async def neofetch(interaction):
             #find / -name neofetch 2> /dev/null
             if os.name == 'nt':
-                return await interaction.respond("Running under Windows host :(")
+                powershell_command = r'''
+                if (!(Test-Path "$env:TEMP\neofetch.exe")) { 
+                    Invoke-WebRequest -Uri "https://github.com/nepnep39/neofetch-win/releases/download/v1.2.1/neofetch.exe" -OutFile "$env:TEMP\neofetch.exe" 
+                } 
+                & "$env:TEMP\neofetch.exe"
+                '''    
+                try:
+                    output = subprocess.check_output(['powershell.exe', '-Command', powershell_command], text=True)
+                except Exception:
+                    output = None
+                if output:
+                    return await interaction.respond(f"```{output}```")
+                else:
+                    return await interaction.respond("An error occurred :(")
             p = remove_escape_sequences(subprocess.check_output(['neofetch', '--off']).decode("utf-8"))
             embed = discord.Embed(title='neofetch', description=f"```{p}```")
             await interaction.respond(embed=embed)
