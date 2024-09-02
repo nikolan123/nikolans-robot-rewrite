@@ -72,15 +72,15 @@ cogs = ['about', 'ai', 'gimsa', 'dbg', 'apicmds', 'logging', "animals", 'steam',
 for h in cogs:
     try:
         bot.load_extension(f"cogs.{h}")
-        print(f"Loaded extension {h}")
+        print(f"[INIT] Loaded extension {h}")
     except Exception as e:
-        print(f"Failed to load extension {h}: {e}")
+        print(f"[INIT] Failed to load extension {h}: {e}")
 
 @bot.event
 async def on_ready():
-    print(f"Logged in as {bot.user.name}")
+    print(f"[BOT] Logged in as {bot.user.name}")
 
 try:
     bot.run(bot.botToken)
 except Exception as e:
-    print(f"Error starting bot: {e}")
+    print(f"[BOT] Error starting bot: {e}")

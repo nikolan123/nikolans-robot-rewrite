@@ -35,7 +35,7 @@ class BotLogging(commands.Cog):
                     fancyoptions = ''
             else:
                 fancyoptions = ''
-            print(f"Error in command {ctx.command} {fancyoptions}: {error}")
+            print(f"[ERR] Error in command {ctx.command} {fancyoptions}: {error}")
             embed = discord.Embed(title = "Error", description = f"An unknown error has occured. This has been reported to the developers.")
             embed.color = discord.Colour.red()
             await ctx.respond(embed=embed, ephemeral=True)
