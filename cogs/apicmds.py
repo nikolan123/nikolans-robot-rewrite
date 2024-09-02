@@ -83,10 +83,10 @@ class apicmds(commands.Cog):
                     title=f"Intel {product}",
                     color=0x2494A1,
                     description=f"""**Cores/Threads** {cores}c{threads}t
-            **Release Date** {release_date}
-            **TDP** {tdp}W
-            **Lithography** {lithography}nm
-            {ghzs}"""
+**Release Date** {release_date}
+**TDP** {tdp}W
+**Lithography** {lithography}nm
+{ghzs}"""
                 )
                 embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.xyz/intel-cpu")
 
