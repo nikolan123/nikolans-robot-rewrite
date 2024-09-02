@@ -1,11 +1,13 @@
 import discord
 from discord.ext import commands
 from discord_webhook import DiscordEmbed, AsyncDiscordWebhook, DiscordWebhook
+import random
 
 class BotLogging(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
+        self.ad_list = []
 
         webhook = DiscordWebhook(url=self.bot.logginghook, username=f"{self.bot.logginghookname} - hi")
         whembed = DiscordEmbed(title="Cog Loaded!", description="The logging cog has been loaded successfully!", color="03b2f8")
@@ -62,6 +64,15 @@ class BotLogging(commands.Cog):
         rlembed.set_timestamp()
         rlhook.add_embed(rlembed)
         await rlhook.execute()
+        # star begger :3
+        if not ctx.author.id in self.ad_list and random.choice(['meow', 'nyaa', 'rawr', 'mrrp', ':3', 'nyaa :3']) == 'mrrp':
+            self.ad_list.append(ctx.author.id)
+            embed = discord.Embed(thumbnail="https://cdn.discordapp.com/emojis/1148871257392152756.webp?size=96&quality=lossless", color=discord.Color.gold(), title="Enjoying the bot?", description="Please, consider starring out GitHub repository as it's free and it helps me out a lot! Thank you.")
+            view = discord.ui.View(timeout=None)
+            gitbuton = discord.ui.Button(label='GitHub Repo', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
+            view.add_item(gitbuton)
+            await ctx.respond(embed=embed, view=view, ephemeral=True)
+            
 
 def setup(bot):
     bot.add_cog(BotLogging(bot))
