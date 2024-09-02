@@ -15,6 +15,17 @@ class steams(commands.Cog):
 
     @steamgroup.command(integration_types={discord.IntegrationType.guild_install, discord.IntegrationType.user_install}, name="random", description="Sends a random Steam game.")
     async def random_steam_game(self, ctx):
+        async def fetch_game_data(appid):
+            url = f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur"
+            async with aiohttp.ClientSession() as session:
+                success = False
+                while not success:
+                    async with session.get(url) as response:
+                        appinfo1 = await response.json()
+                        if appinfo1[str(appid)]['success'] and appinfo1.get(str(appid), {}).get('data') is not None:
+                            success = True
+                            appinfo = appinfo1[str(appid)]['data']
+                            return appinfo
         try:
             with open('data/steam.json', 'r', encoding='latin-1') as steamfile:
                 thejsons = json.load(steamfile)
@@ -22,11 +33,7 @@ class steams(commands.Cog):
                 thegame = random.choice(thegames)
                 appid = thegame['appid']
                 
-                # Fetch game data
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
-                        appinfo1 = await response.json()
-                        appinfo = appinfo1[str(appid)]['data']
+                appinfo = await fetch_game_data(appid)
                 
                 try:
                     if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
@@ -44,12 +51,7 @@ class steams(commands.Cog):
                         thegame = random.choice(thegames)
                         appid = thegame['appid']
                         
-                        async with aiohttp.ClientSession() as session:
-                            async with session.get(f"https://store.steampowered.com/api/appdetails?appids={appid}&cc=eur") as response:
-                                appinfo1 = await response.json()
-                                if appinfo1[str(appid)]['success'] == False:
-                                    return await random_game_callback(interaction)
-                                appinfo = appinfo1[str(appid)]['data']
+                        appinfo = await fetch_game_data(appid)
                         
                         try:
                             if "nudity" in appinfo['content_descriptors']['notes'] or "sex" in appinfo['content_descriptors']['notes']:
