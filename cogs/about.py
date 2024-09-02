@@ -110,7 +110,7 @@ class AboutCommands(commands.Cog):
     async def bot_credits(self, ctx):
         # first page
         embed1 = discord.Embed(title="Credits", colour=0x00b0f4)
-        embed1.add_field(inline=False, name="People", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command and more\n[**mat**](https://github.com/mat-1) - Sand cat images\n[**expect**](https://whatdidyouexpect.eu) - Added a few commands")
+        embed1.add_field(inline=False, name="People", value="[**nikolan**](https://nikolan.net) - Main bot developer\n[**restartb**](https://github.com/restartb) - Helped improve and organise code, made config system, improved docs\n[**tom1212.**](https://github.com/thepotatolover) - Helped take screenshots for the help command and more\n[**mat**](https://github.com/mat-1) - Sand cat images - Added a few commands")
         embed1.add_field(inline=False, name="Links", value=f"[Github Repo (star pls :3)](https://github.com/nikolan123/nikolans-robot-rewrite)\n[Top.gg (upvote pls)](https://top.gg/bot/{self.bot.user.id})")
         # second page
         embed2 = discord.Embed(title='Computers', description="Lenovo ThinkPad X13 Gen 3 AMD\nLenovo ThinkPad L14 Gen 4 Intel\nAcer Aspire 5 (A514-54-532U)\nHuawei MateBook D14\nFujitsu Stylistic Q702\nCustom built (i3-12100/RX7600)\nCustom built (R5-3600/6500XT)\nCustom built (R9-5900X/7800XT)\nLenovo ThinkPad W530 dGPU\nGigabyte G5 KC", color=0x54db8d)
