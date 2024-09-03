@@ -12,11 +12,20 @@ class winkeyss(commands.Cog):
         self._last_member = None
         with open('data/winkeys.csv', mode='r') as csvfile:
             self.winkeyreader = list(csv.reader(csvfile))
+        with open('data/ulkeys.csv', mode='r') as csvfile:
+            self.ulkeyreader = list(csv.reader(csvfile))
 
     async def getoss(self, ctx):
         data = []
         for row in self.winkeyreader:
             if row and ctx.options['version'].lower() in row[0].lower():
+                data.append(row[0])
+        return data
+    
+    async def getulproducts(self, ctx):
+        data = []
+        for row in self.ulkeyreader:
+            if row and ctx.options['product'].lower() in row[0].lower():
                 data.append(row[0])
         return data
 
@@ -31,6 +40,30 @@ class winkeyss(commands.Cog):
                     embed = discord.Embed(colour=0x00b0f4, title=row[0], description=f"Your key is **{row[1]}**")
                     embed.set_footer(text='All information provided by this command is legal and not considered piracy, the keys do not activate Windows and are taken from an official Microsoft page (learn.microsoft.com/windows-server/get-started/kms-client-activation-keys).')
                     await ctx.respond(embed=embed)
+                    return
+        
+        embed = discord.Embed(title = "Not Found", description = f"Please use an available option.")
+        embed.color = discord.Colour.red()
+        await ctx.respond(embed=embed, ephemeral=True)
+
+    @keygroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="ul", description="Returns a key for legacy UL software.")
+    async def ul_key_command(self, ctx, the: discord.Option(str, name="product", description="The product to get a key for", autocomplete=getulproducts)): # type: ignore
+        async with aiofiles.open('data/ulkeys.csv', mode='r') as csvfile:
+            reader = csv.reader(await csvfile.readlines())
+            for row in reader:
+                if row and the == row[0]:
+                    embed = discord.Embed(colour=0x00b0f4, title=row[0], description=f"{'Your key is' if not row[2] == 'Unavailable' else 'The key is'} **{row[2]}**")
+                    embed.set_image(url=row[3])
+                    embed.set_footer(text='Information taken from https://benchmarks.ul.com/legacy-benchmarks.')
+                    view = discord.ui.View(timeout=None)
+                    if not row[1] == "Unavailable":
+                        dlbutton = discord.ui.Button(label='Download', style=discord.ButtonStyle.url, url=row[1])
+                        dlbutton.disabled = False
+                    else:
+                        dlbutton = discord.ui.Button(label='Download', style=discord.ButtonStyle.url, url="https://example.com")
+                        dlbutton.disabled = True
+                    view.add_item(dlbutton)
+                    await ctx.respond(embed=embed, view=view)
                     return
         
         embed = discord.Embed(title = "Not Found", description = f"Please use an available option.")
