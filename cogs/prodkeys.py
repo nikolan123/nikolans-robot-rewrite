@@ -5,21 +5,20 @@ import aiofiles
 import random
 from datetime import datetime, timedelta
 
-async def getoss(ctx):
-    data = []
-    async with aiofiles.open('data/winkeys.csv', mode='r') as csvfile:
-        reader = csv.reader(await csvfile.readlines())
-        for row in reader:
-            if ctx.options['version'].lower() == 'windows':
-                return ['Ubuntu 20.04', 'Debian Bookworm', 'Linux Mint 21.3']
-            if row and ctx.options['version'].lower() in row[0].lower():
-                data.append(row[0])
-        return data
 
 class winkeyss(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
+        with open('data/winkeys.csv', mode='r') as csvfile:
+            self.winkeyreader = list(csv.reader(csvfile))
+
+    async def getoss(self, ctx):
+        data = []
+        for row in self.winkeyreader:
+            if row and ctx.options['version'].lower() in row[0].lower():
+                data.append(row[0])
+        return data
 
     keygroup = discord.SlashCommandGroup(name="key", integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install})
 
