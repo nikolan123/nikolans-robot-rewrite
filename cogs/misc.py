@@ -8,7 +8,7 @@ class misccmds(commands.Cog):
         self._last_member = None
 
 
-    @commands.slash_command(name="pipeyhit", description="Hits someone with metal pipey.")
+    @commands.slash_command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="pipeyhit", description="Hits someone with metal pipey.")
     async def pipeyhit(self, ctx, victim: discord.Option(discord.User, "The user you want to hit"), pingusr: discord.Option(bool, name="ping", description="Ping the victim") = False): # type: ignore
         embed = discord.Embed(
             title="Metal Pipey Hit",
@@ -24,9 +24,9 @@ class misccmds(commands.Cog):
         await ctx.respond(embed=embedDone, ephemeral=True)
         
         if pingusr:
-            await ctx.send(embed=embed, content=victim.mention)
+            await ctx.respond(embed=embed, content=victim.mention)
         else:
-            await ctx.send(embed=embed)
+            await ctx.respond(embed=embed)
 
     @commands.slash_command(name="members", description="Shows the server's member count.")
     async def members(self, ctx):
