@@ -20,10 +20,10 @@ All Discord bots require a Discord Bot Token to function. The steps to get one a
 
 ### Dependencies
 The following dependencies are required to run the bot:\
-`py-cord, g4f, requests, aiohttp, bing_image_urls, discord_webhook, py-cpuinfo, curl_cffi, sympy, aiofiles`.\
+`py-cord, g4f, aiohttp, bing_image_urls, discord_webhook, py-cpuinfo, curl_cffi, sympy, aiofiles`.\
 \
 You can install these dependencies using **PIP** with the following command:\
-`pip install py-cord g4f requests aiohttp bing_image_urls discord_webhook py-cpuinfo curl_cffi sympy aiofiles`
+`pip install py-cord g4f aiohttp bing_image_urls discord_webhook py-cpuinfo curl_cffi sympy aiofiles`
 
 ### Starting the Bot
 Once you have have installed the required Python modules, generated your token, and filled in your config file, you can run the bot as follows:
