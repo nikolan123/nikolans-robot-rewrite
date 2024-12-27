@@ -52,15 +52,21 @@ class animalz(commands.Cog):
 
     @animalgroup.command(integration_types={discord.IntegrationType.guild_install,discord.IntegrationType.user_install}, name="sandcar", description="Sends a sand car. :3 :3 :3 :3")
     async def sandcarrmeoww(self, ctx):
-        async with aiofiles.open('data/carlist.json', mode='r') as carlist:
-            urls = json.loads(await carlist.read())
         cat_titles = ["meowww :3", "mreowwww :33", "mrrrp :3", "meow :3", "nyaa~ :3", "nyaa~", ":3", "rawr :3"]
-        meow = random.choice(urls)
-        meow = urllib.parse.urlunsplit(urllib.parse.urlsplit(meow)._replace(path=urllib.parse.quote(urllib.parse.urlsplit(meow).path), query=urllib.parse.quote(urllib.parse.urlsplit(meow).query, safe="=&")))
-        embed = discord.Embed(title=random.choice(cat_titles), color=discord.Color.blue())
-        embed.set_image(url=meow)
-        await ctx.respond(embed=embed)
-
+        endpoint = "https://beta.sandcat.pics/sand/random"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(endpoint) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    carlink = data["name"]
+                    embed = discord.Embed(title=random.choice(cat_titles, image=carlink)
+                    embed.set_footer(text=f"Requested by {ctx.author.name}")
+                    await ctx.respond(embed=embed)
+                else:
+                    embed = discord.Embed(title = "Error", description = "Failed to fetch data from the API.")
+                    embed.add_field(name = "Status Code", value = response.status)
+                    embed.color = discord.Colour.red()
+                    await ctx.respond(embed=embed)
 
 def setup(bot):
     bot.add_cog(animalz(bot))
