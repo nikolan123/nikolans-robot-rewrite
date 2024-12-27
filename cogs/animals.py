@@ -59,7 +59,7 @@ class animalz(commands.Cog):
                 if response.status == 200:
                     data = await response.json()
                     carlink = data["name"]
-                    embed = discord.Embed(title=random.choice(cat_titles, image=carlink)
+                    embed = discord.Embed(title=random.choice(cat_titles), image=carlink)
                     embed.set_footer(text=f"Requested by {ctx.author.name}")
                     await ctx.respond(embed=embed)
                 else:
