@@ -1,6 +1,6 @@
 import discord
 
-bot = discord.Bot(intents=discord.Intents.all())
+bot = discord.Bot()
 
 def readconfigfile(path):
     #Make dicts global
