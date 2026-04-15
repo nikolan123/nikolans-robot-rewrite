@@ -93,7 +93,7 @@ class winkeyss(commands.Cog):
                 if digit_sum % 7 == 0:
                     if cd_key[-1] != '0' and cd_key[-1] not in ['8', '9']:
                         embed = discord.Embed(title="Windows 95 CD Key", color=0x2494A1, description=f"{cd_key}")
-                        embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/95cdkey")
+                        embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.net/95cdkey")
                         embed.set_thumbnail(url="https://64.media.tumblr.com/f0b0786998dc2e44bfe179e9da3fa116/39dad773e2bb50bc-4c/s540x810/3534cc436c2b90f526bd483f632d0ff804a80e7b.gif")
                         return await ctx.respond(embed=embed)
         return await ctx.respond(discord.Embed(color=discord.Color.red(), title="Error", description="Error validating key, please try again"))

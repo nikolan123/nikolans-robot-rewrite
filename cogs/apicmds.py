@@ -33,7 +33,7 @@ class apicmds(commands.Cog):
 
     async def intelcpu(self, ctxauthor):
         # Get data from API
-        endpoint = "https://api.nikolan.xyz/intel-cpu"
+        endpoint = "https://api.nikolan.net/intel-cpu"
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(endpoint, timeout=3) as response:
@@ -88,13 +88,13 @@ class apicmds(commands.Cog):
 **Lithography** {lithography}nm
 {ghzs}"""
                 )
-                embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.xyz/intel-cpu")
+                embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.net/intel-cpu")
 
                 return embed
      
     async def amdcpu(self, ctxauthor):
         # Get data from API
-        endpoint = "https://api.nikolan.xyz/amd-cpu"
+        endpoint = "https://api.nikolan.net/amd-cpu"
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(endpoint, timeout=3) as response:
@@ -140,7 +140,7 @@ class apicmds(commands.Cog):
 **Lithography** {lithography}
 **Base/Max Frequency** {clockbase}/{clockmax}GHz"""
             )
-            embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.xyz/amd-cpu")
+            embed.set_footer(text=f"Requested by {ctxauthor} | api.nikolan.net/amd-cpu")
             return embed
         else:
             embed = discord.Embed(title = "Error", description = f"An error occurred while fetching CPU data from the API. Try again later.")
@@ -200,7 +200,7 @@ class apicmds(commands.Cog):
                 await interaction.response.defer()
             except discord.errors.InteractionResponded:
                 pass
-            endpoint = "https://api.nikolan.xyz/amd-gpu"
+            endpoint = "https://api.nikolan.net/amd-gpu"
             cpu_info = await self.fetch_data(ctx, endpoint)
             
             # Process data
@@ -222,7 +222,7 @@ class apicmds(commands.Cog):
                     authorname = interaction.author.name
                 except:
                     authorname = interaction.user.name
-                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.xyz/amd-gpu")
+                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.net/amd-gpu")
                 await interaction.respond(embed=embed, view=view)
 
         async def nvidiagpu(interaction):
@@ -231,7 +231,7 @@ class apicmds(commands.Cog):
                 await interaction.response.defer()
             except discord.errors.InteractionResponded:
                 pass
-            endpoint = "https://api.nikolan.xyz/nvidia-gpu"
+            endpoint = "https://api.nikolan.net/nvidia-gpu"
             data = await self.fetch_data(ctx, endpoint)
             
             # Process data
@@ -244,7 +244,7 @@ class apicmds(commands.Cog):
                     authorname = interaction.author.name
                 except:
                     authorname = interaction.user.name
-                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.xyz/nvidia-gpu")
+                embed.set_footer(text=f"Requested by {authorname} | api.nikolan.net/nvidia-gpu")
                 await ctx.respond(embed=embed, view=view)
             else:
                 embed = discord.Embed(title = "Error", description = f"An error occurred while fetching GPU data from the API. Try again later.")
@@ -274,13 +274,13 @@ class apicmds(commands.Cog):
     @commands.cooldown(1, 3, BucketType.user)
     async def eightball(self, ctx, texty: discord.Option(str, name="question", description="The question for 8ball")): # type: ignore
         # Get data from API
-        endpoint = f"https://api.nikolan.xyz/8ball?question={texty}"
+        endpoint = f"https://api.nikolan.net/8ball?question={texty}"
         data = await self.fetch_data(ctx, endpoint)
         
         # Process data
         if data:
             embed = discord.Embed(title="🎱 8ball", color=0x2494A1, description=f"❓ Question: {texty}\n**🎱 8ball: {data['answer']}**")
-            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/8ball")
+            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.net/8ball")
             await ctx.respond(embed=embed)
         else:
             embed = discord.Embed(title = "Error", description = f"An error occurred while fetching 8 ball data from the API. Try again later.")
@@ -291,13 +291,13 @@ class apicmds(commands.Cog):
     @commands.cooldown(1, 3, BucketType.user)
     async def scramble_command(self, ctx, texty: discord.Option(str, name="text", description="The text to scramble.")): # type: ignore
         # Get data from API
-        endpoint = f"https://api.nikolan.xyz/scramble?text={texty}"
+        endpoint = f"https://api.nikolan.net/scramble?text={texty}"
         data = await self.fetch_data(ctx, endpoint)
         
         # Process data
         if data:
             embed = discord.Embed(title="Scramble", color=0x2494A1, description=f"**Oops, I scrambled it:** {data['scrambled_text']}")
-            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.xyz/scramble")
+            embed.set_footer(text=f"Requested by {ctx.author.name} | api.nikolan.net/scramble")
             await ctx.respond(embed=embed)
         else:
             embed = discord.Embed(title = "Error", description = f"An error occurred while fetching scrambled data from the API. Try again later.")

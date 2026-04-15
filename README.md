@@ -1,4 +1,7 @@
+# THIS IS ABANDONED
+
 # nikolan's robot rewrite
+
 Steam API, Spotify API, FBI wanted list, sand cats, Windows product keys, animals, random CPUs and GPUs, Bing image search, AI, 8ball, Minecraft skin and version lookup and more!
 
 ## Setup

@@ -78,11 +78,11 @@ class AboutCommands(commands.Cog):
 
         async def pinglcn(interaction):
             #find / -name ping 2> /dev/null
-            await interaction.respond('Pinging `api.nikolan.xyz`...')
+            await interaction.respond('Pinging `api.nikolan.net`...')
             if os.name == 'nt':
-                pingcmd = 'ping api.nikolan.xyz'
+                pingcmd = 'ping api.nikolan.net'
             else:
-                pingcmd = 'ping api.nikolan.xyz -c 4'
+                pingcmd = 'ping api.nikolan.net -c 4'
             proc = await asyncio.create_subprocess_shell(
                 pingcmd,
                 stderr=asyncio.subprocess.PIPE,
@@ -90,7 +90,7 @@ class AboutCommands(commands.Cog):
             )
             stdout, stderr = await proc.communicate()
             if stdout:
-                embed = discord.Embed(title='ping api.nikolan.xyz', description=f"```{stdout.decode('utf-8')}```")
+                embed = discord.Embed(title='ping api.nikolan.net', description=f"```{stdout.decode('utf-8')}```")
                 await interaction.respond(embed=embed)
             else:
                 await interaction.respond("An error occured.")
@@ -101,7 +101,7 @@ class AboutCommands(commands.Cog):
         butbb = Button(label="Ping localhost", style=discord.ButtonStyle.blurple)
         butbb.callback = pinglc
         thev.add_item(butbb)
-        butbbb = Button(label="Ping api.nikolan.xyz", style=discord.ButtonStyle.blurple)
+        butbbb = Button(label="Ping api.nikolan.net", style=discord.ButtonStyle.blurple)
         butbbb.callback = pinglcn
         thev.add_item(butbbb)
         await ctx.edit(embed=embed, content="", view=thev)

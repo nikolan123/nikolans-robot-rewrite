@@ -66,14 +66,14 @@ class BotLogging(commands.Cog):
         rlhook.add_embed(rlembed)
         await rlhook.execute()
         # star begger :3
-        if not ctx.author.id in self.ad_list and random.choice(['meow', 'nyaa', 'rawr', 'mrrp', ':3', 'nyaa :3']) == 'mrrp':
-            self.ad_list.append(ctx.author.id)
-            await asyncio.sleep(5)
-            embed = discord.Embed(thumbnail="https://cdn.discordapp.com/emojis/1148871257392152756.webp?size=96&quality=lossless", color=discord.Color.gold(), title="Enjoying the bot?", description="Please, consider starring out GitHub repository as it's free and it helps me out a lot! Thank you.")
-            view = discord.ui.View(timeout=None)
-            gitbuton = discord.ui.Button(label='GitHub Repo', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
-            view.add_item(gitbuton)
-            await ctx.respond(embed=embed, view=view, ephemeral=True)
+        # if not ctx.author.id in self.ad_list and random.choice(['meow', 'nyaa', 'rawr', 'mrrp', ':3', 'nyaa :3']) == 'mrrp':
+        #     self.ad_list.append(ctx.author.id)
+        #     await asyncio.sleep(5)
+        #     embed = discord.Embed(thumbnail="https://cdn.discordapp.com/emojis/1148871257392152756.webp?size=96&quality=lossless", color=discord.Color.gold(), title="Enjoying the bot?", description="Please, consider starring out GitHub repository as it's free and it helps me out a lot! Thank you.")
+        #     view = discord.ui.View(timeout=None)
+        #     gitbuton = discord.ui.Button(label='GitHub Repo', style=discord.ButtonStyle.url, url="https://github.com/nikolan123/nikolans-robot-rewrite")
+        #     view.add_item(gitbuton)
+        #     await ctx.respond(embed=embed, view=view, ephemeral=True)
             
 
 def setup(bot):
